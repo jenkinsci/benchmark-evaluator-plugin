@@ -1,0 +1,6 @@
+<?jelly escape-by-default='true'?>
+<div>
+    This plugin loads benchmark results in Jenkins and evaluates them.<br></br>
+    To decide on the build status, upper and lower bounds for concrete metrics and relative changes can be set.<br></br>
+    The results can be viewed in tables and line diagrams. The configuration is done via a graphical user interface.
+</div>

@@ -1,0 +1,126 @@
+<?jelly escape-by-default='true'?>
+<j:jelly xmlns:j="jelly:core" xmlns:l="/lib/layout" xmlns:st="jelly:stapler">
+    <l:layout title="Benchmark"> 
+    	<l:side-panel> 
+            <st:include page="sidepanel.jelly" it="${it.run}" optional="true" /> 
+        </l:side-panel>
+        <l:main-panel> 
+            <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"></link>
+            <style>
+                .myspan {
+                    text-align: center; 
+                    display:block; 
+                    font-size: 130%;  
+                    width: 80%; 
+                    margin-left:4%;
+                    word-wrap: 
+                    break-word; 
+                    word-break: break-all;
+                    border-radius: .25em;
+                    color: #fff;
+                }
+            </style>
+            
+            <j:if test="${it.getName()!=null}">
+            	<span style="color: black;" class="myspan">
+                        <bold>${it.getName()}</bold>
+                </span>
+                <br></br>
+            </j:if>
+            
+            <j:if test="${it.getResults()==null}">
+            
+	            <j:if test="${it.getName()==null}">
+	            	<div id="main_div">
+	                    <span style="background-color: #d9534f;margin-top:3%; " class="myspan">
+	                        ${%readError(it.getFilePath())}
+	                    </span>
+                	</div>
+	            </j:if>
+                
+                <j:if test="${it.getName()!=null}">
+	            	<div id="main_div">
+	                    <span style="background-color: #d9534f; " class="myspan">
+	                        ${%readError(it.getFilePath())}
+	                    </span>
+                	</div>
+	            </j:if>
+	            
+            </j:if>
+
+            <j:if test="${it.getResults()!=null}">
+
+
+
+
+                <script>
+                    var results = ${it.getCurrentResultsAsJson()};
+                    var firstResult = ${it.getFirstResultsAsJson()};
+                    var config = ${it.getConfigAsJson()};
+                    <j:if test="${!it.wasCurrentActionSuccesfull()}">
+                        var lastResult = ${it.getLastResultsAsJson()};
+                        var lastStableResult = ${it.getLastStableResultAsJson()};
+                    </j:if>
+                    <j:if test="${it.wasCurrentActionSuccesfull()}">
+                        var lastResult = ${it.getLastStableResultAsJson()};
+                    </j:if>
+                    var units = ${it.getUnits()};
+                </script>
+
+				
+                <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+				<script type="text/javascript" src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+                
+                <script>
+					var jQ = jQuery.noConflict(true);
+					
+					function sortPercent(x){
+						var str = x.textContent.toLowerCase();
+						if(str.includes('\u221E')){
+							if(str.startsWith('-'))
+								return Number.NEGATIVE_INFINITY;
+							else if(str.startsWith('+'))
+								return Number.POSITIVE_INFINITY;
+						}
+						else
+							return parseFloat(x.innerHTML.toLowerCase().split('%')[0]);
+					}
+				</script>
+                <script src="${rootURL}/plugin/Benchmark_PlugIn/sort.js"></script>
+                <div id="main_div" style="background-color:white;position:relative">
+                    <j:if test="${it.wasCurrentActionSuccesfull()}">
+                        <span style="background-color: #5cb85c;" class="myspan">
+                            ${%successMessage}
+                        </span>
+                    </j:if>
+                    <j:if test="${!it.wasCurrentActionSuccesfull()}">
+                        <span style="background-color: #f0ad4e;" class="myspan">
+                            ${%warningMessage}
+                        </span>
+                    </j:if>
+                    <br></br>
+                    <table id="resultTable" class="table">
+                        <thead>
+                        <tr>
+                            <th id="metrik" onclick="sortTable('metrik','resultTable',a=>a.innerHTML.toLowerCase())">${%metrik}</th>
+                            <th id="value" onclick="sortTable('value','resultTable',a=>parseFloat(a.innerHTML.toLowerCase().split(' ')[0]))">${%value}</th>
+                            <j:if test="${!it.wasCurrentActionSuccesfull()}">
+                                <th id="lastBuild" onclick="sortTable('lastBuild','resultTable',a=>sortPercent(a))">${%percent_to_last}</th>
+                            </j:if>
+                            <th id="lastStableBuild" onclick="sortTable('lastStableBuild','resultTable',a=>sortPercent(a))">${%sinceStable}</th>
+                            <th id="firstBuild" onclick="sortTable('lastStableBuild','resultTable',a=>sortPercent(a))">${%percentage_to_first}</th>
+                        </tr>
+                        </thead>
+					    <tbody id="resultTableBody">
+					    </tbody>
+				    </table>
+                </div>				
+				<script src="${rootURL}/plugin/Benchmark_PlugIn/resetAutoRefresh.js"></script>
+				<script src="${rootURL}/plugin/Benchmark_PlugIn/showBenchmark.js"></script>
+            </j:if>
+
+
+        </l:main-panel>
+    </l:layout>
+</j:jelly>
+

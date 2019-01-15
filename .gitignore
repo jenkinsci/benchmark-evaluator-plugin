@@ -1,5 +1,10 @@
 target/
 work/
+testdir/
+.settings/
+TODO.txt
+.classpath
+.project
 pom.xml.tag
 pom.xml.releaseBackup
 pom.xml.versionsBackup

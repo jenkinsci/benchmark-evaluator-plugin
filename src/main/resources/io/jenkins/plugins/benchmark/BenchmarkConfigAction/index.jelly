@@ -1,0 +1,140 @@
+<?jelly escape-by-default='true'?>
+<j:jelly xmlns:j="jelly:core" xmlns:l="/lib/layout" xmlns:st="jelly:stapler">
+	<l:layout title="Benchmark">
+		<l:main-panel>
+
+			<link rel="stylesheet"
+				href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"></link>
+			<script type="text/javascript"
+				src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+			<script type="text/javascript"
+				src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+			<script>
+				var jQ = jQuery.noConflict(true);
+				var backend = 
+				<st:bind value="${it}"/>
+			</script>
+			<style>
+			.fields{
+				padding-right: 20%;
+				min-width:100px;
+			}
+			</style>
+			<div id="main_div" style="width:90%;">
+				<table id="configTable" class="table">
+					<thead>
+						<tr>
+							<th id="metric" onclick="sortTable('metric','configTable',a=>a.innerHTML.toLowerCase())">${%metric}</th>
+							<th id="unit">${%unit}</th>
+							<th id="minValue">${%minValue}</th>
+							<th id="maxValue">${%maxValue}</th>
+							<th id="minPercent">${%minPercent}</th>
+							<th id="maxPercent">${%maxPercent}</th>
+							<th id="since" onclick="sortTable('since','configTable',a=>(!a.innerHTML.toLowerCase().startsWith('#'))?Number.POSITIVE_INFINITY:parseFloat(a.innerHTML.toLowerCase().substring(1)))">${%listed_since}</th>
+						</tr>
+					</thead>
+					<tbody id="resultTableBody">
+						<j:forEach var="conf" items="${it.getConfiguration()}">
+							<tr id="${conf.getKey()}">
+								<td name="name"><!-- Name -->
+										<b>${conf.getKey()}</b>
+								</td>
+								<td name="unit"><!-- Unit -->
+									<div class="fields">
+										<input type="text" value="${conf.getValue().getUnit()}" id="${conf.getKey()}_unit" class="fields form-control"
+											onchange="setMetricUnit('${conf.getKey()}')">
+										</input>
+									</div>
+								</td>
+								<td name="minValue"><!-- MinValue -->
+									<div class="fields">
+										<input type="number" value="${conf.getValue().getMinValue()}" id="${conf.getKey()}_minValue"
+											step="any" class="form-control"
+											onchange="setMetricMinValue('${conf.getKey()}')">
+										</input>
+									</div>
+								</td>
+								<td name="maxValue"><!-- MaxValue -->
+									<div class="fields">
+										<input type="number" value="${conf.getValue().getMaxValue()}" id="${conf.getKey()}_maxValue"
+											step="any" class="form-control"
+											onchange="setMetricMaxValue('${conf.getKey()}')">
+										</input>
+									</div>
+								</td>
+								<td name="minPercent"><!-- MinChange -->
+									<div class="fields">
+										<input type="number" value="${conf.getValue().getMinPercent()}"
+											id="${conf.getKey()}_minPercent" step="any" class="form-control"
+											onchange="setMinPercent('${conf.getKey()}')">
+										</input>
+									</div>
+								</td>
+								<td name="maxPercent"><!-- MaxChange -->
+									<div class="fields">
+										<input type="number" value="${conf.getValue().getMaxPercent()}"
+											id="${conf.getKey()}_maxPercent" step="any" class="form-control"
+											onchange="setMaxPercent('${conf.getKey()}')">
+										</input>
+									</div>
+								</td>
+								<td name="buildNr"><!-- Buildnr -->
+									<j:if test="${conf.getValue().getBuildNr()==-1}">
+										--
+	                    			</j:if>
+	                    			<j:if test="${conf.getValue().getBuildNr()!=-1}">
+										#${conf.getValue().buildNr}
+	                    			</j:if>
+								</td>
+								<td name="delete">
+									<j:if test="${conf.getValue().getBuildNr()==-1}">
+										<button type="button" class="btn btn-danger btn-sm" onclick="deleteMetric('${conf.getKey()}')">
+											<span class="glyphicon glyphicon-trash" style="color:white"></span>
+	        							</button>
+        							</j:if>
+        							<j:if test="${conf.getValue().getBuildNr()!=-1}">
+										<button type="button" class="btn btn-danger btn-sm" onclick="deleteMetric('${conf.getKey()}')" disabled="true">
+											<span class="glyphicon glyphicon-trash" style="color:white"></span>
+	        							</button>
+	                    			</j:if>
+	          								
+								</td>
+							</tr>
+						</j:forEach>
+					</tbody>
+				</table>
+				<button type="button" class="btn btn-info" data-toggle="modal" data-target="#myModal">${%add}</button>
+			</div>
+			
+			<script src="${rootURL}/plugin/Benchmark_PlugIn/sort.js"></script>
+			<script src="${rootURL}/plugin/Benchmark_PlugIn/resetAutoRefresh.js"></script>
+			<script src="${rootURL}/plugin/Benchmark_PlugIn/configuration.js"></script>
+			
+			<div class="modal fade" id="myModal" role="dialog">
+				<div class="modal-dialog">
+					<!-- Modal content -->
+					<div class="modal-content">
+						<div class="modal-header">
+							<button type="button" class="close" data-dismiss="modal">x</button>
+							<h4 class="modal-title">${%newMetric}</h4>
+						</div>
+						<div class="modal-body">
+							<b>${%metric}:</b><br></br>
+							<input type="text"
+								id="newMetric" class="form-control"
+								onchange="createMetric(document.getElementById('newMetric').value)">
+							</input>
+						</div>
+						<div class="modal-footer">
+							<button type="button" class="btn btn-default"
+								data-dismiss="modal">${%save}</button>
+						</div>
+					</div>
+				</div>
+			</div>
+			
+			
+		</l:main-panel>
+	</l:layout>
+</j:jelly>
+
