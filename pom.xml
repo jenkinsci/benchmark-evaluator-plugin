@@ -21,7 +21,7 @@
           ~ stapler-plugin.version: The Stapler Maven plugin version required by the plugin.
      -->
     </properties>
-    <name>Benchmark Evaluator</name>
+    <name>Benchmark Evaluator Plugin</name>
     <description>Load benchmark results in Jenkins and evaluate them. Make automated decisions about the success of a build based on benchmark results.</description>
     <!-- The default licence for Jenkins OSS Plugins is MIT. Substitute for the applicable one if needed. -->
     <licenses>
