@@ -7,7 +7,16 @@ Currently the plugin only reads CSV and YCSB data. Using small shell scripts the
 <br>
 # How to use this Plugin<br>
 1.) Add a "Benchmark" build step. Specify the file path to the benchmark results.<br><br>
-![alt text](https://github.com/Lehmann-Fabian/benchmark-evaluator/blob/master/readme_images/build_step.JPG "Build Step")<br><br><br>
+![alt text](https://github.com/Lehmann-Fabian/benchmark-evaluator/blob/master/readme_images/build_step.JPG "Build Step")<br>
+The files can be located locally or on the Internet and can be available via http/https, as well as on an ftp server. Also in the second case it is important that the URL ends with the type (e.g. http://www.example.com/benchmark_results.csv). The file type must always be specified locally and on ftp as well.<br>
+A CSV-file must be structured according to the following schema:<br>
+
+|Metric name|Value|
+|:--- | ---:|
+|ExampleMetric1 |40.1|
+|ExampleMetric2 |-42.4|
+
+Optinal a line can be "name;[Build specific name]"<br><br><br>
 2.) "Benchmark Results" and "Benchmark Configuration" will be added to the project overview.<br><br>
 ![alt text](https://github.com/Lehmann-Fabian/benchmark-evaluator/blob/master/readme_images/project_overview.JPG "Project Overview")<br><br><br>
 3.) Specify the thresholds after the first run or by using the add button.<br><br>
