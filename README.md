@@ -18,7 +18,7 @@ A CSV-file must be structured according to the following schema:<br>
 
 Optinal a line can be "name;[Build specific name]"<br><br><br>
 2.) "Benchmark Results" and "Benchmark Configuration" will be added to the project overview.<br><br>
-![alt text](https://github.com/jenkinsci/benchmark-evaluator-plugin/blob/master/readme_images/build_step.JPG "Project Overview")<br><br><br>
+![alt text](https://github.com/jenkinsci/benchmark-evaluator-plugin/blob/master/readme_images/project_overview.JPG "Project Overview")<br><br><br>
 3.) Specify the thresholds after the first run or by using the add button.<br><br>
 ![alt text](https://github.com/jenkinsci/benchmark-evaluator-plugin/blob/master/readme_images/config.JPG "Configuration")<br><br><br>
 4) There is a detailed overview for each build.<br><br>
