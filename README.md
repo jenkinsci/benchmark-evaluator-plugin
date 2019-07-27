@@ -25,4 +25,4 @@ Optinal a line can be "name;[Build specific name]"<br><br><br>
 ![alt text](https://github.com/jenkinsci/benchmark-evaluator-plugin/blob/master/readme_images/detail_page.JPG "Detail Page")<br><br><br>
 5) The results are visualized for all builds in line diagrams.<br><br>
 ![alt text](https://github.com/jenkinsci/benchmark-evaluator-plugin/blob/master/readme_images/line_graph.JPG "Line Graphs")<br><br><br>
-How the plugin can be used can be seen in our paper [tba](https://github.com/Lehmann-Fabian/benchmark-evaluator/).
+How the plugin can be used can be seen in our paper [Continuous Benchmarking: Using System Benchmarking in Build Pipelines](http://dbermbach.github.io/publications/2019-squeet.pdf).
