@@ -4,11 +4,11 @@
 		<l:main-panel>
 
 			<link rel="stylesheet"
-				href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"></link>
+				href="/plugin/benchmark-evaluator/bootstrap.min.css"></link>
 			<script type="text/javascript"
-				src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+				src="/plugin/benchmark-evaluator/jquery.min.js"></script>
 			<script type="text/javascript"
-				src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+				src="/plugin/benchmark-evaluator/bootstrap.min.js"></script>
 			<script>
 				var jQ = jQuery.noConflict(true);
 				var backend = 
@@ -106,9 +106,9 @@
 				<button type="button" class="btn btn-info" data-toggle="modal" data-target="#myModal">${%add}</button>
 			</div>
 			
-			<script src="${rootURL}/plugin/Benchmark_PlugIn/sort.js"></script>
-			<script src="${rootURL}/plugin/Benchmark_PlugIn/resetAutoRefresh.js"></script>
-			<script src="${rootURL}/plugin/Benchmark_PlugIn/configuration.js"></script>
+			<script src="${rootURL}/plugin/benchmark-evaluator/sort.js"></script>
+			<script src="${rootURL}/plugin/benchmark-evaluator/resetAutoRefresh.js"></script>
+			<script src="${rootURL}/plugin/benchmark-evaluator/configuration.js"></script>
 			
 			<div class="modal fade" id="myModal" role="dialog">
 				<div class="modal-dialog">
