@@ -68,7 +68,7 @@
                 </script>
 
 				
-                <script type="text/javascript" src="/plugin/benchmark-evaluator/jquery/3.3.1/jquery.min.js"></script>
+                <script type="text/javascript" src="/plugin/benchmark-evaluator/jquery.min.js"></script>
 				<script type="text/javascript" src="/plugin/benchmark-evaluator/bootstrap.min.js"></script>
                 
                 <script>
