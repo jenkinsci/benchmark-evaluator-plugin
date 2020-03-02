@@ -1,10 +1,33 @@
 # Benchmark Evaluator Plugin
+
 This Plugin provides to load benchmark data to Jenkins.<br>
-The plugin persists the data and decides on success or failure of the evaluated build. Therefor, Service Level Agreements, software specifications, or relative thresholds can be set in a simple graphical interface.<br>
+The plugin persists the data and decides on success or failure of the evaluated build. Therefore, Service Level Agreements, software specifications, or relative thresholds can be set in a simple graphical interface.<br>
 The Visual Interface visualizes the benchmarking results for human users. It can plot individual runs or the development of aggregates across versions, e.g., as line charts.<br>
 Currently the plugin only reads CSV and YCSB data. Using small shell scripts the benchmark results of different tools can be converted into csv files. Classes for new data types can be easily integrated via an interface.<br>
 <br>
-<br>
+
+If you use this software in a publication, please cite it as:
+
+### Text
+Martin Grambow, Fabian Lehmann, David Bermbach. **Continuous Benchmarking: Using System Benchmarking in Build Pipelines**. In: Proceedings of the 1st Workshop on Service Quality and Quantitative Evaluation in new Emerging Technologies (SQUEET 2019). IEEE 2019.
+
+### BibTeX
+```
+@inproceedings{grambow_continuous_benchmarking:_2019,
+    title = {Continuous Benchmarking: Using System Benchmarking in Build Pipelines},
+    booktitle = {Proceedings of the 1st Workshop on Service Quality and Quantitative Evaluation in new Emerging Technologies (SQUEET 2019)},
+    author = {Grambow, Martin and Lehmann, Fabian and Bermbach, David},
+    year = {2019},
+    publisher = {IEEE}
+}
+```
+
+A full list of our [publications](https://www.mcc.tu-berlin.de/menue/forschung/publikationen/parameter/en/) and [prototypes](https://www.mcc.tu-berlin.de/menue/forschung/prototypes/parameter/en/) is available on our group website.
+
+## License
+
+The code in this repository is licensed under the terms of the [MIT](./LICENSE) license.
+
 # How to use this Plugin<br>
 1.) Add a "Benchmark" build step. Specify the file path to the benchmark results.<br><br>
 ![alt text](https://github.com/jenkinsci/benchmark-evaluator-plugin/blob/master/readme_images/build_step.JPG "Build Step")<br>
