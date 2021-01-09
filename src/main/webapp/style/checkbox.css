@@ -35,7 +35,7 @@ input[type=checkbox].css-checkbox:checked+label.css-label {
 }
 
 .vlad {
-	background-image: url(http://csscheckbox.com/checkboxes/vlad.png);
+	background-image: url(/plugin/benchmark-evaluator/vlad.png);
 }
 
 input[type=checkbox].css-checkbox.lrg+label.css-label.lrg {
