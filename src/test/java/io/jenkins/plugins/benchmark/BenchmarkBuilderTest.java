@@ -345,6 +345,9 @@ public class BenchmarkBuilderTest {
 		project.getBuildersList().add(builder);
 		FreeStyleBuild build = project.scheduleBuild2(0).get();//j.buildAndAssertSuccess(project);
 		assertEquals(HelperClass.getLogs(build),Result.SUCCESS,build.getResult());
+		System.out.println(build.getWorkspace());
+		System.out.println(build.getWorkspace().getRemote());
+		System.out.println(File.separatorChar + "config"+builder.getID()+".config");
 		BenchmarkConfiguration conf = BenchmarkConfiguration.getConfig(
 				build.getWorkspace().getRemote().replace("workspace", "jobs")+File.separatorChar + "config"+builder.getID()+".config");
 		conf.change("Metrik1", new ConfigEntry(null,10d,null, 20d,null,1));
