@@ -1,5 +1,6 @@
 package io.jenkins.plugins.benchmark.configuration;
 
+import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.Map.Entry;
 import java.util.Set;
@@ -25,6 +26,9 @@ public class BenchmarkConfiguration {
 		try {
 			bc.load();
 		} catch (FileNotFoundException e) {
+			if(path.contains(File.separatorChar + "jobs" + File.separatorChar )) {
+				return getConfig(path.replace(File.separatorChar + "jobs" + File.separatorChar, File.separatorChar + "workspace" + File.separatorChar));
+			}
 			e.printStackTrace();
 			return null;
 		}
