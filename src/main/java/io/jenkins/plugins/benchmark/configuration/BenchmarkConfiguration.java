@@ -29,6 +29,7 @@ public class BenchmarkConfiguration {
 			if(path.contains(File.separatorChar + "jobs" + File.separatorChar )) {
 				return getConfig(path.replace(File.separatorChar + "jobs" + File.separatorChar, File.separatorChar + "workspace" + File.separatorChar));
 			}
+			System.out.println("Could not find configuration file: " + path);
 			e.printStackTrace();
 			return null;
 		}
