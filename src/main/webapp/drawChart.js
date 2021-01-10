@@ -302,7 +302,11 @@ if(!isNaN(cookR)){
 }
 
 function stayTop(){
-	document.getElementById("controller").style.top=document.getElementById("right-top-nav").getBoundingClientRect().bottom+"px";
+	try{
+		document.getElementById("controller").style.top=document.getElementById("breadcrumbs").getBoundingClientRect().bottom+"px";
+	} catch (error){
+		console.log("Can not find breadcrumbs, please inform the developer!")
+	}
 }
 
 function showButtons(){
