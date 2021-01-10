@@ -86,7 +86,7 @@
 							return parseFloat(x.innerHTML.toLowerCase().split('%')[0]);
 					}
 				</script>
-                <script src="${rootURL}/plugin/Benchmark_PlugIn/sort.js"></script>
+                <script src="${rootURL}/plugin/benchmark-evaluator/sort.js"></script>
                 <div id="main_div" style="background-color:white;position:relative">
                     <j:if test="${it.wasCurrentActionSuccesfull()}">
                         <span style="background-color: #5cb85c;" class="myspan">
@@ -115,8 +115,8 @@
 					    </tbody>
 				    </table>
                 </div>				
-				<script src="${rootURL}/plugin/Benchmark_PlugIn/resetAutoRefresh.js"></script>
-				<script src="${rootURL}/plugin/Benchmark_PlugIn/showBenchmark.js"></script>
+				<script src="${rootURL}/plugin/benchmark-evaluator/resetAutoRefresh.js"></script>
+				<script src="${rootURL}/plugin/benchmark-evaluator/showBenchmark.js"></script>
             </j:if>
 
 

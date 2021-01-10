@@ -2,7 +2,6 @@
 <j:jelly xmlns:j="jelly:core" xmlns:l="/lib/layout" xmlns:st="jelly:stapler">
 	<l:layout title="Benchmark">
 		<l:main-panel>
-			<script src="${rootURL}/plugin/Benchmark_PlugIn/resetAutoRefresh.js"></script>
 			<!-- <script src="https://ajax.googleapis.com/ajax/libs/prototype/1.7.3.0/prototype.js"></script> -->
 			<link rel="stylesheet"
 				href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"></link>
@@ -10,6 +9,7 @@
 				src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 			<script type="text/javascript"
 				src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+			<script type="text/javascript" src="${rootURL}/plugin/benchmark-evaluator/resetAutoRefresh.js"></script>
 			<!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.2/Chart.bundle.min.js"></script>-->
 			<script>
 				var jQ = jQuery.noConflict(true);
@@ -26,9 +26,9 @@
 				}
 
 			</script>
-			<script src="${rootURL}/plugin/Benchmark_PlugIn/sort.js"></script>
+			<script src="${rootURL}/plugin/benchmark-evaluator/sort.js"></script>
 			<style> div.google-visualization-tooltip { border-width:0px; background-color: transparent;}</style>
-			<link rel="stylesheet" href="${rootURL}/plugin/Benchmark_PlugIn/style/checkbox.css"/>
+			<link rel="stylesheet" href="${rootURL}/plugin/benchmark-evaluator/style/checkbox.css"/>
 			<div id="main_div" style="width:100%;">
 				<div id="controller" style="position: fixed;z-index: 1;width:100%;">
 					<div style="margin-top:2px;">
@@ -49,7 +49,7 @@
 			</div>
    			
 			<script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
-			<script src="${rootURL}/plugin/Benchmark_PlugIn/drawChart.js"></script>
+			<script src="${rootURL}/plugin/benchmark-evaluator/drawChart.js"></script>
 		    <script type="text/javascript">
 		      
 		    </script>

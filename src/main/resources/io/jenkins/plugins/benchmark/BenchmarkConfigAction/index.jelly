@@ -106,9 +106,9 @@
 				<button type="button" class="btn btn-info" data-toggle="modal" data-target="#myModal">${%add}</button>
 			</div>
 			
-			<script src="${rootURL}/plugin/Benchmark_PlugIn/sort.js"></script>
-			<script src="${rootURL}/plugin/Benchmark_PlugIn/resetAutoRefresh.js"></script>
-			<script src="${rootURL}/plugin/Benchmark_PlugIn/configuration.js"></script>
+			<script src="${rootURL}/plugin/benchmark-evaluator/sort.js"></script>
+			<script src="${rootURL}/plugin/benchmark-evaluator/resetAutoRefresh.js"></script>
+			<script src="${rootURL}/plugin/benchmark-evaluator/configuration.js"></script>
 			
 			<div class="modal fade" id="myModal" role="dialog">
 				<div class="modal-dialog">
