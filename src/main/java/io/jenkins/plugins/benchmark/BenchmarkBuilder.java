@@ -110,7 +110,6 @@ public class BenchmarkBuilder extends Builder implements SimpleBuildStep {
 	
 	public BenchmarkConfiguration getConfig(Run<?, ?> run){
 		if(bc==null) {
-			System.out.println("Load run-config from: " + getCurrentWorkspace(run)+"config"+getID()+".config");
 			return (bc = BenchmarkConfiguration.getConfig(getCurrentWorkspace(run)+"config"+getID()+".config"));
 		}
 		else return bc;
@@ -118,7 +117,6 @@ public class BenchmarkBuilder extends Builder implements SimpleBuildStep {
 	
 	public BenchmarkConfiguration getConfig(AbstractProject<?, ?> project){
 		if(bc==null) {
-			System.out.println("Load project-config from: " + project.getRootDir().getAbsolutePath()+File.separator+"config"+getID()+".config");			
 			return (bc = BenchmarkConfiguration.getConfig(project.getRootDir().getAbsolutePath()+File.separator+"config"+getID()+".config"));
 		}
 		else return bc;
