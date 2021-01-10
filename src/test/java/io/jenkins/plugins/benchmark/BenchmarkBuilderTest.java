@@ -595,21 +595,15 @@ public class BenchmarkBuilderTest {
 		path = testdir+File.separatorChar+"rightFormat1.csv";
 		answer = descriptor.doCheckFilepath(path);
 		System.out.println(answer.getMessage());
-		
-		
-		
-		Field f = BenchmarkResults.class.getField("endings");
-		
-		Field modifiersField = Field.class.getDeclaredField("modifiers");
-	    modifiersField.setAccessible(true);
-	    modifiersField.setInt(f, f.getModifiers() & ~Modifier.FINAL);
-		
-		f.setAccessible(true);
+				
+		String[] endings = BenchmarkResults.endings;
 		String[] newArray = {"csv","wrong"};
-		f.set(null, newArray);
+		BenchmarkResults.endings = newArray;
 		
 		answer = descriptor.doCheckFilepath(testdir + File.separatorChar + "wrongFormat.wrong");
 		assertEquals(Messages.read_error(testdir + File.separatorChar + "wrongFormat.wrong").replace("'", "&#039;"), answer.getMessage());
+		
+		BenchmarkResults.endings = endings;
 	}
 	
 }

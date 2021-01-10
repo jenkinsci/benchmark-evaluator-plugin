@@ -14,30 +14,23 @@ public class BenchmarkResultTest {
 		
 		String[] endingsOld = BenchmarkResults.endings;
 		
-		Field f = BenchmarkResults.class.getField("endings");
-		
-		Field modifiersField = Field.class.getDeclaredField("modifiers");
-	    modifiersField.setAccessible(true);
-	    modifiersField.setInt(f, f.getModifiers() & ~Modifier.FINAL);
-		
-		f.setAccessible(true);
 		String[] newArray = {"abc"};
-		f.set(null, newArray);
+		BenchmarkResults.endings = newArray;
 		assertEquals("abc", BenchmarkResults.getFormats());
 		
 		String[] newArray1 = {"abc","def"};
-		f.set(null, newArray1);
+		BenchmarkResults.endings = newArray1;
 		assertEquals("abc and def", BenchmarkResults.getFormats());
 		
 		String[] newArray2 = {"abc","def","ghi"};
-		f.set(null, newArray2);
+		BenchmarkResults.endings = newArray2;
 		assertEquals("abc, def and ghi", BenchmarkResults.getFormats());
 		
 		String[] newArray3 = {"abc","def","ghi", "jkl"};
-		f.set(null, newArray3);
+		BenchmarkResults.endings = newArray3;
 		assertEquals("abc, def, ghi and jkl", BenchmarkResults.getFormats());
 		
-		f.set(null, endingsOld);
+		BenchmarkResults.endings = endingsOld;
 	}
 
 }
