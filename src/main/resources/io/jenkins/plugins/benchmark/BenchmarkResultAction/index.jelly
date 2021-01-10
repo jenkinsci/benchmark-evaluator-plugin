@@ -2,7 +2,6 @@
 <j:jelly xmlns:j="jelly:core" xmlns:l="/lib/layout" xmlns:st="jelly:stapler">
 	<l:layout title="Benchmark">
 		<l:main-panel>
-			<!-- <script src="https://ajax.googleapis.com/ajax/libs/prototype/1.7.3.0/prototype.js"></script> -->
 			<link rel="stylesheet"
 				href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"></link>
 			<script type="text/javascript"
@@ -10,7 +9,6 @@
 			<script type="text/javascript"
 				src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 			<script type="text/javascript" src="${rootURL}/plugin/benchmark-evaluator/resetAutoRefresh.js"></script>
-			<!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.2/Chart.bundle.min.js"></script>-->
 			<script>
 				var jQ = jQuery.noConflict(true);
 				var backend =
@@ -37,7 +35,6 @@
 						<button id="zoomOutButton" type="button" class="btn btn-default" onclick="zoom(false)">-</button>
 						<input id="searchField" type="text" class="form-control" style="width:10%;display:initial;" placeholder="${%search}..." onkeyup="filter()"></input>
 						<button id="rightButton" type="button" class="btn btn-default" onclick="go(+1)">&gt;&gt;</button>
-						<!-- <label id="onlySuccesLabel" style="padding-left:5px"><input id="onlySucces" type="checkbox" class="css-checkbox" value="" onclick="onlySuccesClicked()"></input> ${%onlySucces}</label> -->
 						<input type="checkbox" id="onlySucces" class="css-checkbox lrg" style="padding-left:5px" onclick="onlySuccesClicked()"/>
 						<label id="onlySuccesLabel" for="onlySucces" name="onlySuccesLabel" class="css-label lrg" style = "background-image: url(http://csscheckbox.com/checkboxes/vlad.png)">${%onlySucces}</label>
 					</div>
