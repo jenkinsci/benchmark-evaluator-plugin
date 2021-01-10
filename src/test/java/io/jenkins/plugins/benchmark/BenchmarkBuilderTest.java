@@ -399,7 +399,7 @@ public class BenchmarkBuilderTest {
 		FreeStyleBuild build = project.scheduleBuild2(0).get();
 		assertNotNull(builder.getConfig(build));
 		
-		FreeStyleProject project2 = j.createFreeStyleProject();
+		j.createFreeStyleProject();
 		String f2 = testdir + File.separatorChar + "testBuild7.csv";
 		BenchmarkBuilder builder2 = new BenchmarkBuilder(f2);
 		assertNotNull(builder2.getConfig(build));
