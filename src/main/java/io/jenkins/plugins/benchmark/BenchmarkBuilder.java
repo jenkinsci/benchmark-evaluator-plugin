@@ -1,7 +1,6 @@
 package io.jenkins.plugins.benchmark;
 
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.PrintStream;
 import java.util.ArrayList;
@@ -9,14 +8,17 @@ import java.util.Collection;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 import java.util.Optional;
 import java.util.Random;
-import java.util.Map.Entry;
 import java.util.Set;
+
 import javax.servlet.ServletException;
+
 import org.jenkinsci.Symbol;
 import org.kohsuke.stapler.DataBoundConstructor;
 import org.kohsuke.stapler.QueryParameter;
+
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import hudson.Extension;
 import hudson.FilePath;
@@ -107,14 +109,16 @@ public class BenchmarkBuilder extends Builder implements SimpleBuildStep {
 	private transient BenchmarkConfiguration bc;
 	
 	public BenchmarkConfiguration getConfig(Run<?, ?> run){
-		if(bc==null)
+		if(bc==null) {
 			return (bc = BenchmarkConfiguration.getConfig(getCurrentWorkspace(run)+"config"+getID()+".config"));
+		}
 		else return bc;
 	}
 	
 	public BenchmarkConfiguration getConfig(AbstractProject<?, ?> project){
-		if(bc==null)
+		if(bc==null) {
 			return (bc = BenchmarkConfiguration.getConfig(project.getRootDir().getAbsolutePath()+File.separator+"config"+getID()+".config"));
+		}
 		else return bc;
 	}
 

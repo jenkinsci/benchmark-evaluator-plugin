@@ -9,7 +9,8 @@ public class BenchmarkResults {
 	private final String path;
 	
 	@SuppressFBWarnings("MS_MUTABLE_ARRAY")
-	public final static String[] endings = {"csv", "ycsb"};
+	//Not final for testing
+	public static String[] endings = {"csv", "ycsb"};
 	
 	private final Reader reader;
 

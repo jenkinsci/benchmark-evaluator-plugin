@@ -65,7 +65,7 @@ public class BenchmarkConfigActionTest {
 		HelperClass.writeFile(testdir + File.separatorChar+file, "Metrik1;25\nMetrik2;16");
 
 		FreeStyleBuild build = project.scheduleBuild2(0).get();
-		assertEquals(build.getLog(),Result.SUCCESS,build.getResult());
+		assertEquals(HelperClass.getLogs(build),Result.SUCCESS,build.getResult());
 		
 		boolean metrik1 = false;
 		boolean metrik2 = false;
@@ -172,7 +172,7 @@ public class BenchmarkConfigActionTest {
 		HelperClass.writeFile(testdir + File.separatorChar+file, "metrik1;25\nmetrik2;16");
 
 		FreeStyleBuild build = project.scheduleBuild2(0).get();
-		assertEquals(build.getLog(),Result.SUCCESS,build.getResult());
+		assertEquals(HelperClass.getLogs(build),Result.SUCCESS,build.getResult());
 		assertFalse(configAction.deleteMetric("metrik1"));
 		assertFalse(configAction.createMetric("metrik1"));
 		

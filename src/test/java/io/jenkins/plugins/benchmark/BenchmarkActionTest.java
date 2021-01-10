@@ -1,6 +1,8 @@
 package io.jenkins.plugins.benchmark;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
 
 import java.io.File;
 import java.io.IOException;
@@ -11,14 +13,15 @@ import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 import org.jvnet.hudson.test.JenkinsRule;
+
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
+
 import hudson.model.FreeStyleBuild;
 import hudson.model.FreeStyleProject;
 import hudson.model.Result;
 import hudson.model.Run;
 import hudson.tasks.Builder;
-import io.jenkins.plugins.benchmark.HelperClass;
 import io.jenkins.plugins.benchmark.configuration.BenchmarkConfiguration;
 import io.jenkins.plugins.benchmark.configuration.ConfigEntry;
 
@@ -51,7 +54,7 @@ public class BenchmarkActionTest {
 		HelperClass.writeFile(testdir + File.separatorChar +file, "Metrik1;25\nMetrik2;16");
 
 		FreeStyleBuild build = project.scheduleBuild2(0).get();
-		assertEquals(build.getLog(),Result.SUCCESS,build.getResult());
+		assertEquals(HelperClass.getLogs(build),Result.SUCCESS,build.getResult());
 
 		BenchmarkAction a = build.getActions(BenchmarkAction.class).get(0);
 		BenchmarkConfiguration conf = BenchmarkConfiguration.getConfig(getCurrentWorkspace(build)+"config"+builder.getID()+".config");
@@ -92,7 +95,7 @@ public class BenchmarkActionTest {
 
 		HelperClass.writeFile(testdir + File.separatorChar+file, "Metrik1;30\nMetrik2;18");
 		build = project.scheduleBuild2(0).get();
-		assertEquals(build.getLog(),Result.SUCCESS,build.getResult());
+		assertEquals(HelperClass.getLogs(build),Result.SUCCESS,build.getResult());
 
 		a = build.getActions(BenchmarkAction.class).get(0);
 		firstResult = a.getFirstResultsAsJson();
@@ -166,7 +169,7 @@ public class BenchmarkActionTest {
 
 		HelperClass.writeFile(testdir + File.separatorChar+file, "Metrik1;15\nMetrik2;17");
 		build = project.scheduleBuild2(0).get();
-		assertEquals(build.getLog(),Result.SUCCESS,build.getResult());
+		assertEquals(HelperClass.getLogs(build),Result.SUCCESS,build.getResult());
 
 		a = build.getActions(BenchmarkAction.class).get(0);
 		firstResult = a.getFirstResultsAsJson();
@@ -184,7 +187,7 @@ public class BenchmarkActionTest {
 
 		HelperClass.writeFile(testdir + File.separatorChar+file, "Metrik1;18");
 		build = project.scheduleBuild2(0).get();
-		assertEquals(build.getLog(),Result.SUCCESS,build.getResult());
+		assertEquals(HelperClass.getLogs(build),Result.SUCCESS,build.getResult());
 
 		a = build.getActions(BenchmarkAction.class).get(0);
 		firstResult = a.getFirstResultsAsJson();
@@ -202,7 +205,7 @@ public class BenchmarkActionTest {
 
 		HelperClass.writeFile(testdir + File.separatorChar+file, "Metrik1;15\nMetrik2;17");
 		build = project.scheduleBuild2(0).get();
-		assertEquals(build.getLog(),Result.SUCCESS,build.getResult());
+		assertEquals(HelperClass.getLogs(build),Result.SUCCESS,build.getResult());
 
 		a = build.getActions(BenchmarkAction.class).get(0);
 		firstResult = a.getFirstResultsAsJson();
@@ -243,7 +246,7 @@ public class BenchmarkActionTest {
 		HelperClass.writeFile(testdir + File.separatorChar+file, "Metrik1;25\nMetrik2;16");
 
 		FreeStyleBuild build = project.scheduleBuild2(0).get();
-		assertEquals(build.getLog(),Result.SUCCESS,build.getResult());
+		assertEquals(HelperClass.getLogs(build),Result.SUCCESS,build.getResult());
 
 		BenchmarkAction a = build.getActions(BenchmarkAction.class).get(0);
 		BenchmarkConfiguration conf = BenchmarkConfiguration.getConfig(getCurrentWorkspace(build)+"config"+builder.getID()+".config");
@@ -321,7 +324,7 @@ public class BenchmarkActionTest {
 		HelperClass.writeFile(testdir + File.separatorChar+file, "Metrik1;21\nMetrik2;16");
 
 		build = project.scheduleBuild2(0).get();
-		assertEquals(build.getLog(),Result.SUCCESS,build.getResult());
+		assertEquals(HelperClass.getLogs(build),Result.SUCCESS,build.getResult());
 
 		a = build.getActions(BenchmarkAction.class).get(0);
 
@@ -339,7 +342,7 @@ public class BenchmarkActionTest {
 		HelperClass.writeFile(testdir + File.separatorChar+file, "Metrik1;26\nMetrik2;1823");
 
 		build = project.scheduleBuild2(0).get();
-		assertEquals(build.getLog(),Result.SUCCESS,build.getResult());
+		assertEquals(HelperClass.getLogs(build),Result.SUCCESS,build.getResult());
 
 		a = build.getActions(BenchmarkAction.class).get(0);
 
@@ -362,7 +365,7 @@ public class BenchmarkActionTest {
 		//RUN 1
 
 		FreeStyleBuild build = project.scheduleBuild2(0).get();
-		assertEquals(build.getLog(),Result.SUCCESS,build.getResult());
+		assertEquals(HelperClass.getLogs(build),Result.SUCCESS,build.getResult());
 		
 		//RUN 2
 		
@@ -387,7 +390,7 @@ public class BenchmarkActionTest {
 		HelperClass.writeFile(testdir + File.separatorChar+file, "Metrik1;21\nMetrik2;16");
 
 		build = project.scheduleBuild2(0).get();
-		assertEquals(build.getLog(),Result.SUCCESS,build.getResult());
+		assertEquals(HelperClass.getLogs(build),Result.SUCCESS,build.getResult());
 
 		a = build.getActions(BenchmarkAction.class).get(0);
 
@@ -441,8 +444,7 @@ public class BenchmarkActionTest {
 	}
 
 	private void check(String input, Double metrik1,Double metrik2){
-		JsonParser parser = new JsonParser();
-		JsonObject jO = parser.parse(input).getAsJsonObject();
+		JsonObject jO = JsonParser.parseString(input).getAsJsonObject();
 		if(metrik1!=null){
 			assertTrue(jO.has("Metrik1"));
 			assertEquals(metrik1, jO.get("Metrik1").getAsDouble(),0.000001);

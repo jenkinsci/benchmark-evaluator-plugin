@@ -25,6 +25,7 @@ public class BenchmarkConfiguration {
 		try {
 			bc.load();
 		} catch (FileNotFoundException e) {
+			System.out.println("Could not find configuration file: " + path);
 			e.printStackTrace();
 			return null;
 		}

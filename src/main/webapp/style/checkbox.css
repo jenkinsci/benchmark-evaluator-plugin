@@ -34,10 +34,6 @@ input[type=checkbox].css-checkbox:checked+label.css-label {
 	background-position: 0 -15px;
 }
 
-.vlad {
-	background-image: url(http://csscheckbox.com/checkboxes/vlad.png);
-}
-
 input[type=checkbox].css-checkbox.lrg+label.css-label.lrg {
 	padding-left: 22px;
 	height: 20px;

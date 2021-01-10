@@ -302,7 +302,11 @@ if(!isNaN(cookR)){
 }
 
 function stayTop(){
-	document.getElementById("controller").style.top=document.getElementById("right-top-nav").getBoundingClientRect().bottom+"px";
+	try{
+		document.getElementById("controller").style.top=document.getElementById("breadcrumbs").getBoundingClientRect().bottom+"px";
+	} catch (error){
+		console.log("Can not find breadcrumbs, please inform the developer!")
+	}
 }
 
 function showButtons(){
@@ -408,16 +412,6 @@ function onlySuccesClicked(){
 	setLeftAndRight(left,right);	
 }
 
-function orderBar(){
-	var sizeLeft = document.getElementById("leftButton").getBoundingClientRect().width;
-	var sizeRight = document.getElementById("rightButton").getBoundingClientRect().width;
-	var sizeZoomIn = document.getElementById("zoomInButton").getBoundingClientRect().width;
-	var sizeZoomOut = document.getElementById("zoomOutButton").getBoundingClientRect().width;
-	var sizeSearch = document.getElementById("searchField").getBoundingClientRect().width;
-	var leftSize = document.getElementById("controller").getBoundingClientRect().width*0.8 - sizeLeft - sizeRight - sizeZoomIn - sizeZoomOut - sizeSearch - 2;
-	document.getElementById("rightButton").style.marginLeft = leftSize+"px";
-}
-
 function filter(start=false){
 	var input = document.getElementById("searchField").value.toLowerCase();
 	if(start && input === "") return;
@@ -440,7 +434,6 @@ function filter(start=false){
 //on Zoom, windows size change
 function resize (duration = 0) {
 	stayTop();
-	orderBar();
 	for (var c in columnDic) {
 		var col = parseInt(c);
 		if(col==0)continue;
@@ -483,7 +476,6 @@ function resize (duration = 0) {
 //-----------------------------------------------------------------------------------------------Optic------------------------------------------------------------------------//
 //-----------------------------------------------------------------------------------------------Start------------------------------------------------------------------------//
 stayTop();
-orderBar();
 showButtons();
 //-----------------------------------------------------------------------------------------------Start------------------------------------------------------------------------//
 //-----------------------------------------------------------------------------------------------Chart------------------------------------------------------------------------//
