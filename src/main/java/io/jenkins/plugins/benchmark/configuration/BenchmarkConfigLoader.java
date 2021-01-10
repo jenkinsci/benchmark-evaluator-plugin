@@ -45,7 +45,7 @@ class BenchmarkConfigLoader {
 					if(out!=null)
 						out.close();
 					else
-						throw new FileNotFoundException();
+						throw new FileNotFoundException("Could not create config: " + f);
 				}
 				return;
 			}
