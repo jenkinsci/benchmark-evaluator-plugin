@@ -321,15 +321,14 @@ public class BenchmarkResultActionTest {
 		assertEquals(buildNr, getElement("buildNr",result));
 		assertEquals(unsuccesfullBuildsNames, getElement("unsuccesfullBuildsNames",result));
 		assertEquals(names, getElement("buildNames",result));
-		JsonParser parser = new JsonParser();
-		JsonObject o1 = parser.parse(dataSet2).getAsJsonObject();
-		JsonObject o2 = parser.parse(getElement("dataSet2",result)).getAsJsonObject();	
+		JsonObject o1 = JsonParser.parseString(dataSet2).getAsJsonObject();
+		JsonObject o2 = JsonParser.parseString(getElement("dataSet2",result)).getAsJsonObject();	
 		for(Entry<String, JsonElement> a : o1.entrySet()){
 			assertEquals(a.getValue().toString(), o2.get(a.getKey()).toString());
 		}
 		assertEquals(o1, o2);
-		o1 = parser.parse(metricInfo).getAsJsonObject();
-		o2 = parser.parse(getElement("metricInfo",result)).getAsJsonObject();	
+		o1 = JsonParser.parseString(metricInfo).getAsJsonObject();
+		o2 = JsonParser.parseString(getElement("metricInfo",result)).getAsJsonObject();	
 		assertEquals(o1, o2);
 	}
 	

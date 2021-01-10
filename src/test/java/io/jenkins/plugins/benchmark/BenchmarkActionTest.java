@@ -444,8 +444,7 @@ public class BenchmarkActionTest {
 	}
 
 	private void check(String input, Double metrik1,Double metrik2){
-		JsonParser parser = new JsonParser();
-		JsonObject jO = parser.parse(input).getAsJsonObject();
+		JsonObject jO = JsonParser.parseString(input).getAsJsonObject();
 		if(metrik1!=null){
 			assertTrue(jO.has("Metrik1"));
 			assertEquals(metrik1, jO.get("Metrik1").getAsDouble(),0.000001);
