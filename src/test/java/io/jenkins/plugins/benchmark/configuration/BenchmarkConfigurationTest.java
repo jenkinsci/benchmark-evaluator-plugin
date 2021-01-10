@@ -91,7 +91,7 @@ public class BenchmarkConfigurationTest {
 
 		assertEquals(true,c.add("MetrikTest", e));
 		assertEquals(false,c.add("MetrikTest", new ConfigEntry(null,null,null, 10d,null,2)));
-		Thread.currentThread().sleep(1000);
+		Thread.sleep(1000);
 		BufferedReader in = new BufferedReader(new FileReader(f1));
 		in.readLine();
 		String s = in.readLine();
@@ -127,7 +127,7 @@ public class BenchmarkConfigurationTest {
 
 		assertEquals(true,c.change("MetrikTest", e));
 		assertEquals(false,c.change("MetrikTest2", e));
-		Thread.currentThread().sleep(1000);
+		Thread.sleep(1000);
 		BufferedReader in = new BufferedReader(new FileReader(f1));
 		in.readLine();
 		String s = in.readLine();
@@ -216,13 +216,13 @@ public class BenchmarkConfigurationTest {
 		@Override
 		public void run() {
 			try {
-				Thread.currentThread().sleep(start - System.currentTimeMillis());
+				Thread.sleep(start - System.currentTimeMillis());
 			} catch (InterruptedException e) {
 				e.printStackTrace();
 			}
 			c = BenchmarkConfiguration.getConfig(path);
 			try {
-				Thread.currentThread().sleep(start + 1000 - System.currentTimeMillis());
+				Thread.sleep(start + 1000 - System.currentTimeMillis());
 			} catch (InterruptedException e) {
 				e.printStackTrace();
 			}
@@ -316,7 +316,7 @@ public class BenchmarkConfigurationTest {
 		BufferedReader in;
 		int rows = 0;
 		try {
-			Thread.currentThread().sleep(1000);
+			Thread.sleep(1000);
 			in = new BufferedReader(new FileReader(f1));
 			while(in.readLine()!=null){
 				rows++;

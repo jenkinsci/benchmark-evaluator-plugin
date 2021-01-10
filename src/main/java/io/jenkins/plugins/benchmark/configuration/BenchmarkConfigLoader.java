@@ -141,7 +141,7 @@ class BenchmarkConfigLoader {
 			,"DM_DEFAULT_ENCODING","JLM_JSR166_UTILCONCURRENT_MONITORENTER"})
 		public void run() {
 			try {
-				Thread.currentThread().sleep(100);
+				Thread.sleep(100);
 			} catch (InterruptedException e1) {}
 			File f = new File(path + ".tmp");
 			PrintWriter out = null;
