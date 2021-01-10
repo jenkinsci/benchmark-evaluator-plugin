@@ -1,21 +1,29 @@
 package io.jenkins.plugins.benchmark;
-import hudson.model.*;
-import hudson.tasks.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertTrue;
+
+import java.io.File;
+import java.lang.reflect.Field;
+import java.lang.reflect.Modifier;
+
+import org.junit.After;
+import org.junit.Before;
+import org.junit.Rule;
+import org.junit.Test;
+import org.jvnet.hudson.test.JenkinsRule;
+
+import hudson.model.FreeStyleBuild;
+import hudson.model.FreeStyleProject;
+import hudson.model.Result;
+import hudson.tasks.Builder;
 import hudson.util.FormValidation;
 import io.jenkins.plugins.benchmark.BenchmarkBuilder.DescriptorImpl;
 import io.jenkins.plugins.benchmark.configuration.BenchmarkConfiguration;
 import io.jenkins.plugins.benchmark.configuration.ConfigEntry;
 import io.jenkins.plugins.benchmark.data.BenchmarkResults;
-import static org.junit.Assert.*;
-import java.io.File;
-import java.lang.reflect.Field;
-import java.lang.reflect.Modifier;
-import org.junit.After;
-import org.junit.AfterClass;
-import org.junit.Before;
-import org.junit.Rule;
-import org.junit.Test;
-import org.jvnet.hudson.test.*;
 
 public class BenchmarkBuilderTest {
 	@Rule public JenkinsRule j = new JenkinsRule(); 

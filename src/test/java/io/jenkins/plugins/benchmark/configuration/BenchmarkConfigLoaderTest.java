@@ -1,6 +1,6 @@
 package io.jenkins.plugins.benchmark.configuration;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
 
 import java.io.File;
 import java.lang.reflect.Method;
@@ -11,7 +11,6 @@ import org.junit.Before;
 import org.junit.Test;
 
 import io.jenkins.plugins.benchmark.HelperClass;
-import io.jenkins.plugins.benchmark.configuration.BenchmarkConfigLoader;
 
 public class BenchmarkConfigLoaderTest {
 	

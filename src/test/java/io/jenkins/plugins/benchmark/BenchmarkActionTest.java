@@ -1,6 +1,8 @@
 package io.jenkins.plugins.benchmark;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
 
 import java.io.File;
 import java.io.IOException;
@@ -11,14 +13,15 @@ import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 import org.jvnet.hudson.test.JenkinsRule;
+
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
+
 import hudson.model.FreeStyleBuild;
 import hudson.model.FreeStyleProject;
 import hudson.model.Result;
 import hudson.model.Run;
 import hudson.tasks.Builder;
-import io.jenkins.plugins.benchmark.HelperClass;
 import io.jenkins.plugins.benchmark.configuration.BenchmarkConfiguration;
 import io.jenkins.plugins.benchmark.configuration.ConfigEntry;
 
