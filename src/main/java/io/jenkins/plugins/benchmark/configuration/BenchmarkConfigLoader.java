@@ -33,6 +33,7 @@ class BenchmarkConfigLoader {
 		synchronized (config) {
 			File f = new File(path);
 			if(!f.exists()){
+				System.out.println("New config: " + path);
 				PrintWriter out = null;
 				try {
 					out = new PrintWriter(new BufferedWriter(new FileWriter(f)));
