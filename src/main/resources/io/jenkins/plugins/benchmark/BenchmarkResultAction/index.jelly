@@ -39,7 +39,7 @@
 						<button id="rightButton" type="button" class="btn btn-default" onclick="go(+1)">&gt;&gt;</button>
 						<!-- <label id="onlySuccesLabel" style="padding-left:5px"><input id="onlySucces" type="checkbox" class="css-checkbox" value="" onclick="onlySuccesClicked()"></input> ${%onlySucces}</label> -->
 						<input type="checkbox" id="onlySucces" class="css-checkbox lrg" style="padding-left:5px" onclick="onlySuccesClicked()"/>
-						<label id="onlySuccesLabel" for="onlySucces" name="onlySuccesLabel" class="css-label lrg vlad">${%onlySucces}</label>
+						<label id="onlySuccesLabel" for="onlySucces" name="onlySuccesLabel" class="css-label lrg" style = "background-image: url(http://csscheckbox.com/checkboxes/vlad.png)">${%onlySucces}</label>
 					</div>
 				</div>
 				<table id="charts" style="width:100%;">
