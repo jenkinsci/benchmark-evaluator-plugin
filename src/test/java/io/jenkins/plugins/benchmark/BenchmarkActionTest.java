@@ -51,7 +51,7 @@ public class BenchmarkActionTest {
 		HelperClass.writeFile(testdir + File.separatorChar +file, "Metrik1;25\nMetrik2;16");
 
 		FreeStyleBuild build = project.scheduleBuild2(0).get();
-		assertEquals(build.getLog(),Result.SUCCESS,build.getResult());
+		assertEquals(HelperClass.getLogs(build),Result.SUCCESS,build.getResult());
 
 		BenchmarkAction a = build.getActions(BenchmarkAction.class).get(0);
 		BenchmarkConfiguration conf = BenchmarkConfiguration.getConfig(getCurrentWorkspace(build)+"config"+builder.getID()+".config");
@@ -92,7 +92,7 @@ public class BenchmarkActionTest {
 
 		HelperClass.writeFile(testdir + File.separatorChar+file, "Metrik1;30\nMetrik2;18");
 		build = project.scheduleBuild2(0).get();
-		assertEquals(build.getLog(),Result.SUCCESS,build.getResult());
+		assertEquals(HelperClass.getLogs(build),Result.SUCCESS,build.getResult());
 
 		a = build.getActions(BenchmarkAction.class).get(0);
 		firstResult = a.getFirstResultsAsJson();
@@ -166,7 +166,7 @@ public class BenchmarkActionTest {
 
 		HelperClass.writeFile(testdir + File.separatorChar+file, "Metrik1;15\nMetrik2;17");
 		build = project.scheduleBuild2(0).get();
-		assertEquals(build.getLog(),Result.SUCCESS,build.getResult());
+		assertEquals(HelperClass.getLogs(build),Result.SUCCESS,build.getResult());
 
 		a = build.getActions(BenchmarkAction.class).get(0);
 		firstResult = a.getFirstResultsAsJson();
@@ -184,7 +184,7 @@ public class BenchmarkActionTest {
 
 		HelperClass.writeFile(testdir + File.separatorChar+file, "Metrik1;18");
 		build = project.scheduleBuild2(0).get();
-		assertEquals(build.getLog(),Result.SUCCESS,build.getResult());
+		assertEquals(HelperClass.getLogs(build),Result.SUCCESS,build.getResult());
 
 		a = build.getActions(BenchmarkAction.class).get(0);
 		firstResult = a.getFirstResultsAsJson();
@@ -202,7 +202,7 @@ public class BenchmarkActionTest {
 
 		HelperClass.writeFile(testdir + File.separatorChar+file, "Metrik1;15\nMetrik2;17");
 		build = project.scheduleBuild2(0).get();
-		assertEquals(build.getLog(),Result.SUCCESS,build.getResult());
+		assertEquals(HelperClass.getLogs(build),Result.SUCCESS,build.getResult());
 
 		a = build.getActions(BenchmarkAction.class).get(0);
 		firstResult = a.getFirstResultsAsJson();
@@ -243,7 +243,7 @@ public class BenchmarkActionTest {
 		HelperClass.writeFile(testdir + File.separatorChar+file, "Metrik1;25\nMetrik2;16");
 
 		FreeStyleBuild build = project.scheduleBuild2(0).get();
-		assertEquals(build.getLog(),Result.SUCCESS,build.getResult());
+		assertEquals(HelperClass.getLogs(build),Result.SUCCESS,build.getResult());
 
 		BenchmarkAction a = build.getActions(BenchmarkAction.class).get(0);
 		BenchmarkConfiguration conf = BenchmarkConfiguration.getConfig(getCurrentWorkspace(build)+"config"+builder.getID()+".config");
@@ -321,7 +321,7 @@ public class BenchmarkActionTest {
 		HelperClass.writeFile(testdir + File.separatorChar+file, "Metrik1;21\nMetrik2;16");
 
 		build = project.scheduleBuild2(0).get();
-		assertEquals(build.getLog(),Result.SUCCESS,build.getResult());
+		assertEquals(HelperClass.getLogs(build),Result.SUCCESS,build.getResult());
 
 		a = build.getActions(BenchmarkAction.class).get(0);
 
@@ -339,7 +339,7 @@ public class BenchmarkActionTest {
 		HelperClass.writeFile(testdir + File.separatorChar+file, "Metrik1;26\nMetrik2;1823");
 
 		build = project.scheduleBuild2(0).get();
-		assertEquals(build.getLog(),Result.SUCCESS,build.getResult());
+		assertEquals(HelperClass.getLogs(build),Result.SUCCESS,build.getResult());
 
 		a = build.getActions(BenchmarkAction.class).get(0);
 
@@ -362,7 +362,7 @@ public class BenchmarkActionTest {
 		//RUN 1
 
 		FreeStyleBuild build = project.scheduleBuild2(0).get();
-		assertEquals(build.getLog(),Result.SUCCESS,build.getResult());
+		assertEquals(HelperClass.getLogs(build),Result.SUCCESS,build.getResult());
 		
 		//RUN 2
 		
@@ -387,7 +387,7 @@ public class BenchmarkActionTest {
 		HelperClass.writeFile(testdir + File.separatorChar+file, "Metrik1;21\nMetrik2;16");
 
 		build = project.scheduleBuild2(0).get();
-		assertEquals(build.getLog(),Result.SUCCESS,build.getResult());
+		assertEquals(HelperClass.getLogs(build),Result.SUCCESS,build.getResult());
 
 		a = build.getActions(BenchmarkAction.class).get(0);
 

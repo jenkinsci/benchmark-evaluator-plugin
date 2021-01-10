@@ -6,6 +6,8 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
 
+import hudson.model.FreeStyleBuild;
+
 public class HelperClass {
 	
 	public static String testdir = "testdir";
@@ -54,6 +56,15 @@ public class HelperClass {
 				file.delete();
 			}
 			f.delete();
+		}
+	}
+	
+	public static String getLogs(FreeStyleBuild build) {
+		try {
+			return build.getLog(5000).stream().reduce("", (a,b) -> a + System.lineSeparator() + b);
+		} catch (IOException e) {
+			e.printStackTrace();
+			return null;
 		}
 	}
 }
