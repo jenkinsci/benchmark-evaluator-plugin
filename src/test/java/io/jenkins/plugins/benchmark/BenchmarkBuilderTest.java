@@ -338,7 +338,7 @@ public class BenchmarkBuilderTest {
 		FreeStyleBuild build = project.scheduleBuild2(0).get();//j.buildAndAssertSuccess(project);
 		assertEquals(build.getLog(),Result.SUCCESS,build.getResult());
 		BenchmarkConfiguration conf = BenchmarkConfiguration.getConfig(
-				project.getWorkspace().toString().replace("workspace", "jobs")+File.separatorChar + "config"+builder.getID()+".config");
+				build.getWorkspace().getRemote().replace("workspace", "jobs")+File.separatorChar + "config"+builder.getID()+".config");
 		conf.change("Metrik1", new ConfigEntry(null,10d,null, 20d,null,1));
 		conf.change("Metrik2", new ConfigEntry(null,40d,null, 20d,null,1));
 		
@@ -407,8 +407,7 @@ public class BenchmarkBuilderTest {
 		FreeStyleBuild build = project.scheduleBuild2(0).get();//j.buildAndAssertSuccess(project);
 		assertEquals(build.getLog(),Result.SUCCESS,build.getResult());
 		
-		BenchmarkConfiguration conf = BenchmarkConfiguration.getConfig(
-				project.getWorkspace().toString().replace("workspace", "jobs")+File.separatorChar + "config"+builder.getID()+".config");
+		BenchmarkConfiguration conf = BenchmarkConfiguration.getConfig(build.getWorkspace().getRemote().replace("workspace", "jobs")+File.separatorChar + "config"+builder.getID()+".config");
 		conf.change("Metrik1", new ConfigEntry(null,10d,null, null, null,1));
 		conf.change("Metrik2", new ConfigEntry(10d,null,null, null, null,1));
 		
@@ -499,7 +498,7 @@ public class BenchmarkBuilderTest {
 		FreeStyleBuild build = project.scheduleBuild2(0).get();
 		assertEquals(build.getLog(),Result.SUCCESS,build.getResult());
 		BenchmarkConfiguration conf = BenchmarkConfiguration.getConfig(
-				project.getWorkspace().toString().replace("workspace", "jobs")+File.separatorChar + "config"+builder.getID()+".config");
+				build.getWorkspace().getRemote().replace("workspace", "jobs")+File.separatorChar + "config"+builder.getID()+".config");
 		conf.change("Metrik1", new ConfigEntry(null,null,10d,null,null,1));
 		conf.change("Metrik2", new ConfigEntry(null,null,40d,null,null,1));
 		
