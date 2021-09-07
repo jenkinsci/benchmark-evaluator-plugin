@@ -15,7 +15,7 @@ doi: "10.1109/ic2e.2019.00039"
 date-released: "2019"
 url: "http://dbermbach.github.io/publications/2019-squeet.pdf"
 preferred-citation:
-  type: inproceedings
+  type: "inproceedings"
   authors:
   - family-names: "Grambow"
     given-names: "Martin"
