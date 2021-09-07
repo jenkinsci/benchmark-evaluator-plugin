@@ -11,8 +11,8 @@ authors:
   given-names: "David"
   orcid: "https://orcid.org/0000-0002-7524-3256"
 title: "Continuous Benchmarking: Using System Benchmarking in Build Pipelines"
-doi: 10.1109/ic2e.2019.00039
-date-released: 2019
+doi: "10.1109/ic2e.2019.00039"
+date-released: "2019"
 url: "http://dbermbach.github.io/publications/2019-squeet.pdf"
 preferred-citation:
   type: inproceedings
@@ -26,8 +26,10 @@ preferred-citation:
   - family-names: "Bermbach"
     given-names: "David"
     orcid: "https://orcid.org/0000-0002-7524-3256"
-    doi: "10.0000/00000"
+  doi: "10.1109/ic2e.2019.00039"
   booktitle: "Proceedings of the 1st Workshop on Service Quality and Quantitative Evaluation in new Emerging Technologies (SQUEET 2019)"
   title: "Continuous Benchmarking: Using System Benchmarking in Build Pipelines"
   publisher: "IEEE"
+  start: 241
+  end: 246
   year: 2019
