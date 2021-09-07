@@ -1,0 +1,33 @@
+cff-version: 1.2.0
+message: "If you use this software, please cite it as below."
+authors:
+- family-names: "Grambow"
+  given-names: "Martin"
+  orcid: " https://orcid.org/0000-0001-6866-5461"
+- family-names: "Lehmann"
+  given-names: "Fabian"
+  orcid: "https://orcid.org/0000-0003-0520-0792"
+- family-names: "Bermbach"
+  given-names: "David"
+  orcid: "https://orcid.org/0000-0002-7524-3256"
+title: "Continuous Benchmarking: Using System Benchmarking in Build Pipelines"
+doi: 10.1109/ic2e.2019.00039
+date-released: 2019
+url: "http://dbermbach.github.io/publications/2019-squeet.pdf"
+preferred-citation:
+  type: inproceedings
+  authors:
+  - family-names: "Grambow"
+    given-names: "Martin"
+    orcid: " https://orcid.org/0000-0001-6866-5461"
+  - family-names: "Lehmann"
+    given-names: "Fabian"
+    orcid: "https://orcid.org/0000-0003-0520-0792"
+  - family-names: "Bermbach"
+    given-names: "David"
+    orcid: "https://orcid.org/0000-0002-7524-3256"
+    doi: "10.0000/00000"
+  booktitle: "Proceedings of the 1st Workshop on Service Quality and Quantitative Evaluation in new Emerging Technologies (SQUEET 2019)"
+  title: "Continuous Benchmarking: Using System Benchmarking in Build Pipelines"
+  publisher: "IEEE"
+  year: 2019
