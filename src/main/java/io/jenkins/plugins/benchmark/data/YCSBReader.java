@@ -7,18 +7,19 @@ import java.util.HashMap;
 import java.util.Map;
 
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
+import hudson.FilePath;
 import io.jenkins.plugins.benchmark.Messages;
 
 public class YCSBReader extends Reader {
 
 	@Override
 	@SuppressFBWarnings({"RV_RETURN_VALUE_IGNORED_BAD_PRACTICE"})
-	public ReadResult read(String path) throws InputException {
+	public ReadResult read(String path, FilePath workspace) throws InputException {
 		Map<String,Double> l = new HashMap<String,Double>();
 		
 		BufferedReader in = null;
 		try {
-			in = new BufferedReader(getBufferedReader(path));
+			in = new BufferedReader(getBufferedReader(path, workspace));
 			String line;
 			String name = null;
 			int linenr = 1;

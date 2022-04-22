@@ -73,7 +73,7 @@ public class BenchmarkBuilder extends Builder implements SimpleBuildStep {
 		boolean succes = false;
 		ReadResult m = null;
 		try {
-			m = new BenchmarkResults(filepath).read();
+			m = new BenchmarkResults(filepath, workspace).read();
 		} catch (InputException | WrongFormatException  e ) {
 			listener.getLogger().println(e.getMessage());
 		} 
@@ -283,7 +283,7 @@ public class BenchmarkBuilder extends Builder implements SimpleBuildStep {
 			}
 			Map<String, Double> m = null;
 			try {
-				ReadResult r = new BenchmarkResults(filepath).read();
+				ReadResult r = new BenchmarkResults(filepath, null).read();
 				if(r != null) {
 					if(r.getException() != null) return FormValidation.error(r.getException());
 					m = r.getMessurements();
