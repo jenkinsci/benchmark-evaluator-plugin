@@ -19,13 +19,15 @@ public abstract class Reader {
 	@SuppressFBWarnings("DM_DEFAULT_ENCODING")
 	protected InputStreamReader getBufferedReader(String path, FilePath workspace) throws IOException{
 //		FilePath f = new FilePath(workspace.)
-		FilePath fileOnNode = workspace.child(path);
-		try {
-			if(fileOnNode.exists())
-				return new InputStreamReader(fileOnNode.toVirtualFile().open());
-		} catch (InterruptedException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+		if (workspace != null) {
+			FilePath fileOnNode = workspace.child(path);
+			try {
+				if(fileOnNode.exists())
+					return new InputStreamReader(fileOnNode.toVirtualFile().open());
+			} catch (InterruptedException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 		}
 		
 		File f = new File(path);
