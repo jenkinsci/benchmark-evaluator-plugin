@@ -18,7 +18,6 @@ public abstract class Reader {
 	
 	@SuppressFBWarnings("DM_DEFAULT_ENCODING")
 	protected InputStreamReader getBufferedReader(String path, FilePath workspace) throws IOException{
-//		FilePath f = new FilePath(workspace.)
 		if (workspace != null) {
 			FilePath fileOnNode = workspace.child(path);
 			try {
