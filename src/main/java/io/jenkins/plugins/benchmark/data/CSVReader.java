@@ -7,6 +7,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
+import hudson.FilePath;
 import io.jenkins.plugins.benchmark.Messages;
 import io.jenkins.plugins.benchmark.data.BenchmarkResults.WrongFormatException;
 
@@ -14,13 +15,13 @@ public class CSVReader extends Reader {
 
 	@Override
 	@SuppressFBWarnings({"RV_RETURN_VALUE_IGNORED_BAD_PRACTICE"})
-	public ReadResult read(String path) throws InputException{
+	public ReadResult read(String path, FilePath workspace) throws InputException{
 		
 		Map<String,Double> l = new HashMap<String,Double>();
 		
 		BufferedReader in = null;
 		try {
-			in = new BufferedReader(getBufferedReader(path));
+			in = new BufferedReader(getBufferedReader(path, workspace));
 			String line = in.readLine();
 			String name = null;
 			if(line==null) throw new InputException(Messages.fileIsNotPresent());

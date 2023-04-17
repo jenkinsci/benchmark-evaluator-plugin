@@ -10,13 +10,25 @@ import java.net.URL;
 import javax.net.ssl.HttpsURLConnection;
 
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
+import hudson.FilePath;
 
 public abstract class Reader {
 	
-	public abstract ReadResult read(String file) throws InputException;
+	public abstract ReadResult read(String file, FilePath workspace) throws InputException;
 	
 	@SuppressFBWarnings("DM_DEFAULT_ENCODING")
-	protected InputStreamReader getBufferedReader(String path) throws IOException{
+	protected InputStreamReader getBufferedReader(String path, FilePath workspace) throws IOException{
+		if (workspace != null) {
+			FilePath fileOnNode = workspace.child(path);
+			try {
+				if(fileOnNode.exists())
+					return new InputStreamReader(fileOnNode.toVirtualFile().open());
+			} catch (InterruptedException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+		
 		File f = new File(path);
 		if(!f.exists() || f.isDirectory()){
 			if(path.toLowerCase().startsWith("http://")||path.toLowerCase().startsWith("ftp://")){
