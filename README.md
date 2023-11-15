@@ -45,10 +45,15 @@ The code in this repository is licensed under the terms of the [MIT](./LICENSE) 
     The file type must always be specified locally and on ftp as well.
     A CSV-file must be structured according to the following schema:
 
-    |Metric name|Value|
-    |:--- | ---:|
-    |ExampleMetric1 |40.1|
-    |ExampleMetric2 |-42.4|
+    ```
+    metric name;value
+    ExampleMetric1;40.1
+    ExampleMetric2;-42.4
+    ```
+    - first line is optional and may be a header, which is ignored
+    - all following lines must have exactly two columns separated by one semicolon `;` or comma `,`.
+    - the first column specifies the name of the metric.
+    - the second column specifies the value of the metric. Floating point values should use the dot `.`; a comma `,` is only allowed when semicolon `;` is used as the field separator.
 
     Optinal a line can be "name;[Build specific name]"
 3.  "Benchmark Results" and "Benchmark Configuration" will be added to the project overview.
