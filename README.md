@@ -55,7 +55,7 @@ The code in this repository is licensed under the terms of the [MIT](./LICENSE) 
     - the first column specifies the name of the metric.
     - the second column specifies the value of the metric. Floating point values should use the dot `.`; a comma `,` is only allowed when semicolon `;` is used as the field separator.
 
-    Optinal a line can be "name;[Build specific name]"
+    Optional a line can be "name;[Build specific name]"
 3.  "Benchmark Results" and "Benchmark Configuration" will be added to the project overview.
     ![alt text](https://github.com/jenkinsci/benchmark-evaluator-plugin/blob/master/readme_images/project_overview.JPG "Project Overview")
 4.  Specify the thresholds after the first run or by using the add button.
