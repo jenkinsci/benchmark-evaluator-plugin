@@ -9,9 +9,10 @@
     </parent>
     <groupId>io.jenkins.plugins</groupId>
     <artifactId>benchmark-evaluator</artifactId>
-    <version>1.0.2-SNAPSHOT</version>
+    <version>${changelist}</version>
     <packaging>hpi</packaging>
     <properties>
+        <changelist>999999-SNAPSHOT</changelist>
         <!-- Baseline Jenkins version you use to build the plugin. Users must have this version or newer to run. -->
         <jenkins.version>2.440.3</jenkins.version>
         <java.level>11</java.level>
