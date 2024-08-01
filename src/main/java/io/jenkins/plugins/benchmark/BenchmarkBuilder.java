@@ -111,9 +111,9 @@ public class BenchmarkBuilder extends Builder implements SimpleBuildStep {
 	
 	public BenchmarkConfiguration getConfig(Run<?, ?> run){
 		if(bc==null) {
-			return (bc = BenchmarkConfiguration.getConfig(getCurrentWorkspace(run)+"config"+getID()+".config"));
+			bc = BenchmarkConfiguration.getConfig( getCurrentWorkspace( run ) + "config" + getID() + ".config" );
 		}
-		else return bc;
+		return bc;
 	}
 	
 	public BenchmarkConfiguration getConfig(AbstractProject<?, ?> project){
