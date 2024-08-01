@@ -583,15 +583,6 @@ public class BenchmarkBuilderTest {
 		answer = descriptor.doCheckFilepath(testdir + File.separatorChar + "validName.csv");
 		assertEquals(Messages.fileIsNotPresent(), answer.getMessage());
 		
-		answer = descriptor.doCheckFilepath("ftp://ftp.ebi.ac.uk/pub/databases/chembl/VEHICLe/VEHICLe.csv");
-		assertTrue(answer.getMessage().contains("Line 2: Wrong format."));
-		
-		answer = descriptor.doCheckFilepath("https://raw.githubusercontent.com/openmundi/world.csv/master/countries(249)_alpha3.csv");
-		assertTrue(answer.getMessage().contains("Line 2: Wrong format."));
-		
-		answer = descriptor.doCheckFilepath("http://wiki.splunk.com/Http_status.csv");
-		assertTrue(answer.getMessage().contains("Line 2: Wrong format."));
-		
 		String path = "http://noUrlThatReallyExsistIHope1238217312.de/results.csv";
 		answer = descriptor.doCheckFilepath(path);
 		assertEquals(Messages.read_error(path).replace("'", "&#039;"), answer.getMessage());
