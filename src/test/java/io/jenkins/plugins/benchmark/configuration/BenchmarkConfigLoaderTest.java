@@ -14,16 +14,16 @@ import io.jenkins.plugins.benchmark.HelperClass;
 
 public class BenchmarkConfigLoaderTest {
 	
-	private static String testdir = HelperClass.testdir;
+	private String testdir;
 	
 	@Before
 	public void createTestDir(){
-		HelperClass.createTestDir();
+		testdir = HelperClass.createTestDir();
 	}
 	
 	@After
 	public void delete(){
-		HelperClass.deleteTestFiles();
+		HelperClass.deleteTestFiles( testdir );
 	}
  
 

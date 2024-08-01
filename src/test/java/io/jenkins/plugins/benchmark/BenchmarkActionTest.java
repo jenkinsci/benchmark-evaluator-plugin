@@ -29,16 +29,16 @@ public class BenchmarkActionTest {
 
 	@Rule public JenkinsRule j = new JenkinsRule(); 
 
-	private static String testdir = HelperClass.testdir;
+	private String testdir;
 	
 	@Before
 	public void createTestDir(){
-		HelperClass.createTestDir();
+		testdir = HelperClass.createTestDir();
 	}
 	
 	@After
 	public void delete(){
-		HelperClass.deleteTestFiles();
+		HelperClass.deleteTestFiles( testdir );
 	}
  
 

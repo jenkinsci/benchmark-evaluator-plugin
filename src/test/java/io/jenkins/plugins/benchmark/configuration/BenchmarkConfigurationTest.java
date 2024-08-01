@@ -10,7 +10,6 @@ import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
@@ -26,11 +25,11 @@ import io.jenkins.plugins.benchmark.HelperClass;
 
 public class BenchmarkConfigurationTest {
 
-	private String testPath = HelperClass.testdir;
+	private String testdir;
 	
 	@Before
 	public void createTestDir(){
-		HelperClass.createTestDir();
+		testdir = HelperClass.createTestDir();
 	}
 	
 	@Before
@@ -50,18 +49,18 @@ public class BenchmarkConfigurationTest {
 		String[] names = {"testConfig", "testConfig1"};
 		
 		for (int i = 0; i < contents.length; i++) {
-			HelperClass.writeTestFile(names[i] + ".config", contents[i]);
+			HelperClass.writeTestFile( testdir, names[i] + ".config", contents[i]);
 		}
 	}
 	
 	@After
 	public void delete(){
-		HelperClass.deleteTestFiles();
+		HelperClass.deleteTestFiles( testdir );
 	}
 
 	@Test
 	public void testFirstSave() throws InterruptedException {
-		File f1 = new File(testPath + File.separatorChar + "config1.config");
+		File f1 = new File( testdir + File.separatorChar + "config1.config");
 		assertEquals(false, f1.exists());
 		BenchmarkConfiguration.getConfig(f1.getAbsolutePath());
 		assertEquals(true, f1.exists());
@@ -71,7 +70,7 @@ public class BenchmarkConfigurationTest {
 
 	@Test
 	public void testFirstLoad() throws InterruptedException {
-		File f1 = new File(testPath + File.separatorChar + "testConfig.config");
+		File f1 = new File( testdir + File.separatorChar + "testConfig.config");
 		BenchmarkConfiguration c = BenchmarkConfiguration.getConfig(f1.getAbsolutePath());
 		assertEquals(true, BenchmarkConfiguration.getConfig(f1.getAbsolutePath())==c);
 		assertEquals(3, c.getSize());
@@ -85,7 +84,7 @@ public class BenchmarkConfigurationTest {
 
 	@Test
 	public void testAdd() throws InterruptedException, Exception {
-		File f1 = new File(testPath + File.separatorChar + "config2.config");
+		File f1 = new File( testdir + File.separatorChar + "config2.config");
 		assertEquals(false, f1.exists());
 		BenchmarkConfiguration c = BenchmarkConfiguration.getConfig(f1.getAbsolutePath());
 		assertEquals(true, f1.exists());
@@ -117,7 +116,7 @@ public class BenchmarkConfigurationTest {
 
 	@Test
 	public void testChange() throws InterruptedException, Exception {
-		File f1 = new File(testPath + File.separatorChar + "config3.config");
+		File f1 = new File( testdir + File.separatorChar + "config3.config");
 		assertEquals(false, f1.exists());
 		BenchmarkConfiguration c = BenchmarkConfiguration.getConfig(f1.getAbsolutePath());
 		assertEquals(true, f1.exists());
@@ -152,7 +151,7 @@ public class BenchmarkConfigurationTest {
 	public void testMultiThread() throws InterruptedException, Exception {
 		List<File> listF = new ArrayList<File>();
 		for (int i = 4; i < 14; i++) {
-			listF.add(new File(testPath + File.separatorChar + "config"+i+".config"));
+			listF.add(new File( testdir + File.separatorChar + "config"+i+".config"));
 		}
 		for(File f:listF){
 			int poolsize = 10;
@@ -183,7 +182,7 @@ public class BenchmarkConfigurationTest {
 
 	@Test
 	public void testMultiThread1() throws InterruptedException, Exception {
-		File f1 = new File(testPath + File.separatorChar + "config14.config");
+		File f1 = new File( testdir + File.separatorChar + "config14.config");
 		int poolsize = 50;
 		ExecutorService pool = Executors.newFixedThreadPool(poolsize);
 		
@@ -242,7 +241,7 @@ public class BenchmarkConfigurationTest {
 	
 	@Test
 	public void loadAtSameTime() throws InterruptedException{
-		File f1 = new File(testPath + File.separatorChar + "config15.config");
+		File f1 = new File( testdir + File.separatorChar + "config15.config");
 		ExecutorService pool = Executors.newFixedThreadPool(50);
 		
 		Set<BenchmarkConfiguration> s = ConcurrentHashMap.newKeySet();
@@ -258,7 +257,7 @@ public class BenchmarkConfigurationTest {
 	
 	@Test
 	public void wrongFormatedConfig() {
-		File f1 = new File(testPath + File.separatorChar + "config17.config");
+		File f1 = new File( testdir + File.separatorChar + "config17.config");
 		String t = "Metrik1;10;11;12;13;;1\n"
 				+ "Metrik2;A;B;C;D;UNIT;-99\n"
 				+ "Metrik3;;UNIT;4\n"
@@ -294,7 +293,7 @@ public class BenchmarkConfigurationTest {
 	
 	@Test
 	public void rightFormatedConfig() {
-		File f1 = new File(testPath + File.separatorChar + "config18.config");
+		File f1 = new File( testdir + File.separatorChar + "config18.config");
 		String t = "Metrik1;-10;11;-12;13;;1\n";
 		HelperClass.writeFile(f1.getPath(), t);
 		BenchmarkConfiguration config = BenchmarkConfiguration.getConfig(f1.getAbsolutePath());

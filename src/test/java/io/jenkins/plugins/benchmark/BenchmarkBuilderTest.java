@@ -26,9 +26,14 @@ import io.jenkins.plugins.benchmark.configuration.ConfigEntry;
 import io.jenkins.plugins.benchmark.data.BenchmarkResults;
 
 public class BenchmarkBuilderTest {
-	@Rule public JenkinsRule j = new JenkinsRule(); 
+	@Rule public JenkinsRule j = new JenkinsRule();
 
-	private static String testdir = HelperClass.testdir;
+	private String testdir;
+
+	@Before
+	public void createTestDir(){
+		testdir = HelperClass.createTestDir();
+	}
 	
 	private int wrong;
 	private int right;
@@ -114,10 +119,10 @@ public class BenchmarkBuilderTest {
 		wrong = contents.length - 1;
 		
 		for (int i = 1; i < contents.length; i++) {
-			HelperClass.writeTestFile("wrongFormat" + i + ".csv", contents[i-1]);
+			HelperClass.writeTestFile( testdir, "wrongFormat" + i + ".csv", contents[i-1]);
 		}
 		
-		HelperClass.writeTestFile("wrongFormat.wrong", contents[contents.length - 1]);
+		HelperClass.writeTestFile( testdir, "wrongFormat.wrong", contents[contents.length - 1]);
 	}
 	
 	@Before
@@ -136,7 +141,7 @@ public class BenchmarkBuilderTest {
 		String[] names = {"load", "load_Failure", "load_Name", "load_Name_Failure", "run", "run_Failure", "run_Name", "run_Name_Failure"};
 		
 		for (int i = 0; i < contents.length; i++) {
-			HelperClass.writeTestFile(names[i] + ".ycsb", contents[i]);
+			HelperClass.writeTestFile( testdir, names[i] + ".ycsb", contents[i]);
 		}
 	}
 	
@@ -219,13 +224,13 @@ public class BenchmarkBuilderTest {
 		right = contents.length;
 		
 		for (int i = 1; i <= contents.length; i++) {
-			HelperClass.writeTestFile("rightFormat" + i + ".csv", contents[i-1]);
+			HelperClass.writeTestFile( testdir, "rightFormat" + i + ".csv", contents[i-1]);
 		}
 	}
 	
 	@After
 	public void delete(){
-		HelperClass.deleteTestFiles();
+		HelperClass.deleteTestFiles( testdir );
 	}
 	
 	@Test 

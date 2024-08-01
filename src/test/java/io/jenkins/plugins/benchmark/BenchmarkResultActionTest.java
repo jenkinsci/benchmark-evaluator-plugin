@@ -22,16 +22,16 @@ public class BenchmarkResultActionTest {
 
 	@Rule public JenkinsRule j = new JenkinsRule(); 
 
-	private static String testdir = HelperClass.testdir;
+	private String testdir;
 	
 	@Before
 	public void createTestDir(){
-		HelperClass.createTestDir();
+		testdir = HelperClass.createTestDir();
 	}
 	
 	@After
 	public void delete(){
-		HelperClass.deleteTestFiles();
+		HelperClass.deleteTestFiles( testdir );
 	}
  
 
@@ -60,7 +60,7 @@ public class BenchmarkResultActionTest {
 
 		allEquals(result, "[]", "[]", "{}","{}", "[]");
 		
-		HelperClass.writeTestFile(file, "Metrik1;25\nMetrik2;16");
+		HelperClass.writeTestFile( testdir, file, "Metrik1;25\nMetrik2;16");
 		FreeStyleBuild build = project.scheduleBuild2(0).get();
 		assertEquals(Result.SUCCESS,build.getResult());
 		
