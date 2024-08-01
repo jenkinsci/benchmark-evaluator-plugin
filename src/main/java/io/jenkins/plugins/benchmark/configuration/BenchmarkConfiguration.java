@@ -32,7 +32,7 @@ public class BenchmarkConfiguration {
 		return bc;
 	}
 
-	private Object loadhelper = new Object();
+	private final Object loadhelper = new Object();
 
 	private void load() throws FileNotFoundException{
 		synchronized (loadhelper) {
