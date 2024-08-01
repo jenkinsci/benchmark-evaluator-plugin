@@ -13,6 +13,7 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
@@ -244,7 +245,7 @@ public class BenchmarkConfigurationTest {
 		File f1 = new File(testPath + File.separatorChar + "config15.config");
 		ExecutorService pool = Executors.newFixedThreadPool(50);
 		
-		Set<BenchmarkConfiguration> s = new HashSet<>();
+		Set<BenchmarkConfiguration> s = ConcurrentHashMap.newKeySet();
 		
 		for (int i = 0; i < 50; i++) {
 			pool.execute(()->s.add(BenchmarkConfiguration.getConfig(f1.getAbsolutePath())));
