@@ -255,14 +255,6 @@ public class BenchmarkConfigurationTest {
 		assertEquals(1, s.size());
 	}
 	
-	
-	
-//	@Test
-//	public void unWritableFile() throws InterruptedException{
-//		File f1 = new File("C:"+File.separatorChar +"Windows"+File.separatorChar +"config16.config");
-//		assertNull(BenchmarkConfiguration.getConfig(f1.getAbsolutePath()));
-//	}
-	
 	@Test
 	public void wrongFormatedConfig() {
 		File f1 = new File(testPath + File.separatorChar + "config17.config");
