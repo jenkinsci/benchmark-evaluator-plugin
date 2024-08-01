@@ -32,7 +32,23 @@
             <url>https://opensource.org/licenses/MIT</url>
         </license>
     </licenses>
+    <dependencyManagement>
+        <dependencies>
+            <dependency>
+                <!-- Pick up common dependencies for the selected LTS line: https://github.com/jenkinsci/bom#usage -->
+                <groupId>io.jenkins.tools.bom</groupId>
+                <artifactId>bom-2.440.x</artifactId>
+                <version>3193.v330d8248d39e</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+        </dependencies>
+    </dependencyManagement>
     <dependencies>
+        <dependency>
+            <groupId>org.jenkins-ci.plugins</groupId>
+            <artifactId>structs</artifactId>
+        </dependency>
         <dependency>
 			<groupId>com.google.code.gson</groupId>
 			<artifactId>gson</artifactId>
