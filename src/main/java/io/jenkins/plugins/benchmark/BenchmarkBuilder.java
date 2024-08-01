@@ -43,6 +43,7 @@ import jenkins.tasks.SimpleBuildStep;
 public class BenchmarkBuilder extends Builder implements SimpleBuildStep {
 
 	private transient static Set<Integer> ids = new HashSet<Integer>();
+	private static final Random random = new Random();
 
 	final private String filepath;
 	private AbstractProject<?, ?> project;
@@ -54,7 +55,6 @@ public class BenchmarkBuilder extends Builder implements SimpleBuildStep {
 		this.filepath = filepath;
 		int r;
 		synchronized (ids) {
-			final Random random = new Random();
 			do {
 				r = random.nextInt(Integer.MAX_VALUE);
 			}while(ids.contains(r));
