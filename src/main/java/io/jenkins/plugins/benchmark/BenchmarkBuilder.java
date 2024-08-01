@@ -54,8 +54,9 @@ public class BenchmarkBuilder extends Builder implements SimpleBuildStep {
 		this.filepath = filepath;
 		int r;
 		synchronized (ids) {
+			final Random random = new Random();
 			do {
-				r = new Random().nextInt(Integer.MAX_VALUE);
+				r = random.nextInt(Integer.MAX_VALUE);
 			}while(ids.contains(r));
 			ids.add(r);
 		} 
