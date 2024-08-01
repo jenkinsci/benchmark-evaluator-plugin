@@ -26,13 +26,16 @@ import io.jenkins.plugins.benchmark.configuration.ConfigEntry;
 import io.jenkins.plugins.benchmark.data.BenchmarkResults;
 
 public class BenchmarkBuilderTest {
-	@Rule public JenkinsRule j = new JenkinsRule();
 
+	@Rule
+	public JenkinsRule j = new JenkinsRule();
 	private String testdir;
+	private HelperClass helper;
 
 	@Before
 	public void createTestDir(){
-		testdir = HelperClass.createTestDir();
+		helper = new HelperClass(j);
+		testdir = helper.createTestDir();
 	}
 	
 	private int wrong;
@@ -119,10 +122,10 @@ public class BenchmarkBuilderTest {
 		wrong = contents.length - 1;
 		
 		for (int i = 1; i < contents.length; i++) {
-			HelperClass.writeTestFile( testdir, "wrongFormat" + i + ".csv", contents[i-1]);
+			helper.writeTestFile( testdir, "wrongFormat" + i + ".csv", contents[i-1]);
 		}
 		
-		HelperClass.writeTestFile( testdir, "wrongFormat.wrong", contents[contents.length - 1]);
+		helper.writeTestFile( testdir, "wrongFormat.wrong", contents[contents.length - 1]);
 	}
 	
 	@Before
@@ -141,7 +144,7 @@ public class BenchmarkBuilderTest {
 		String[] names = {"load", "load_Failure", "load_Name", "load_Name_Failure", "run", "run_Failure", "run_Name", "run_Name_Failure"};
 		
 		for (int i = 0; i < contents.length; i++) {
-			HelperClass.writeTestFile( testdir, names[i] + ".ycsb", contents[i]);
+			helper.writeTestFile( testdir, names[i] + ".ycsb", contents[i]);
 		}
 	}
 	
@@ -224,23 +227,23 @@ public class BenchmarkBuilderTest {
 		right = contents.length;
 		
 		for (int i = 1; i <= contents.length; i++) {
-			HelperClass.writeTestFile( testdir, "rightFormat" + i + ".csv", contents[i-1]);
+			helper.writeTestFile( testdir, "rightFormat" + i + ".csv", contents[i-1]);
 		}
 	}
 	
 	@After
 	public void delete(){
-		HelperClass.deleteTestFiles( testdir );
+		helper.deleteTestFiles();
 	}
 	
 	@Test 
 	public void wrongFormat() throws Exception {
 		for (int i = 1; i <= wrong; i++) {
-			FreeStyleProject project = j.createFreeStyleProject();
+			FreeStyleProject project = helper.createFreeStyleProject();
 			Builder builder = new BenchmarkBuilder(testdir + File.separatorChar + "wrongFormat"+i+".csv");
 			project.getBuildersList().add(builder);
 			FreeStyleBuild build = project.scheduleBuild2(0).get();
-			System.out.println(HelperClass.getLogs(build));
+			System.out.println(helper.getLogs(build));
 			assertEquals("wrongFormat"+i+".csv",Result.FAILURE,build.getResult());
 			j.assertLogContains("Wrong format.", build);
 		}
@@ -248,37 +251,37 @@ public class BenchmarkBuilderTest {
 	
 	@Test
 	public void wrongFileFormat() throws Exception{
-		FreeStyleProject project = j.createFreeStyleProject();
+		FreeStyleProject project = helper.createFreeStyleProject();
 		Builder builder = new BenchmarkBuilder(testdir + File.separatorChar + "wrongFormat.wrong");
 		project.getBuildersList().add(builder);
 		FreeStyleBuild build = project.scheduleBuild2(0).get();
 		assertEquals(Result.FAILURE,build.getResult());
 		j.assertLogContains(Messages.wrongFormat("csv and ycsb"), build);
 		
-		project = j.createFreeStyleProject();
+		project = helper.createFreeStyleProject();
 		builder = new BenchmarkBuilder(testdir);
 		project.getBuildersList().add(builder);
 		build = project.scheduleBuild2(0).get();
 		assertEquals(Result.FAILURE,build.getResult());
 		j.assertLogContains(Messages.read_error(testdir), build);
-		
-		project = j.createFreeStyleProject();
+
+		project = helper.createFreeStyleProject();
 		builder = new BenchmarkBuilder(testdir+File.separatorChar + "");
 		project.getBuildersList().add(builder);
 		build = project.scheduleBuild2(0).get();
 		assertEquals(Result.FAILURE,build.getResult());
 		j.assertLogContains(Messages.read_error(testdir+File.separatorChar + ""), build);
-		
-		project = j.createFreeStyleProject();
+
+		project = helper.createFreeStyleProject();
 		builder = new BenchmarkBuilder(testdir+File.separatorChar + "doesNotEx.csv");
 		project.getBuildersList().add(builder);
 		build = project.scheduleBuild2(0).get();
 		assertEquals(Result.FAILURE,build.getResult());
 		j.assertLogContains(Messages.read_error(testdir+File.separatorChar + "doesNotEx.csv"), build);
-		
-		project = j.createFreeStyleProject();
+
+		project = helper.createFreeStyleProject();
 		File f = new File(testdir+File.separatorChar + "testBuild5.csv");
-		HelperClass.writeFile(f.getAbsolutePath(), null);
+		helper.writeFile(f.getAbsolutePath(), null);
 		builder = new BenchmarkBuilder(f.getAbsolutePath());
 		project.getBuildersList().add(builder);
 		build = project.scheduleBuild2(0).get();
@@ -289,11 +292,11 @@ public class BenchmarkBuilderTest {
 	@Test 
 	public void rightFormat() throws Exception {
 		for (int i = 1; i <= right; i++) {
-			FreeStyleProject project = j.createFreeStyleProject();
+			FreeStyleProject project = helper.createFreeStyleProject();
 			Builder builder = new BenchmarkBuilder(testdir + File.separatorChar + "rightFormat"+i+".csv");
 			project.getBuildersList().add(builder);
 			FreeStyleBuild build = project.scheduleBuild2(0).get();//j.buildAndAssertSuccess(project);
-			assertEquals(HelperClass.getLogs(build),Result.SUCCESS,build.getResult());
+			assertEquals(helper.getLogs(build),Result.SUCCESS,build.getResult());
 			j.assertLogContains(Messages.read_succes(), build);
 			// Assert that the console log contains the output we expect
 			//j.assertLogContains("", build);
@@ -304,11 +307,11 @@ public class BenchmarkBuilderTest {
 	public void readYCSB() throws Exception {
 		String[] files = {"run","load","run_Name","load_Name"};
 		for (String f : files) {
-			FreeStyleProject project = j.createFreeStyleProject();
+			FreeStyleProject project = helper.createFreeStyleProject();
 			Builder builder = new BenchmarkBuilder(testdir + File.separatorChar + f + ".ycsb");
 			project.getBuildersList().add(builder);
 			FreeStyleBuild build = project.scheduleBuild2(0).get();//j.buildAndAssertSuccess(project);
-			assertEquals(HelperClass.getLogs(build),Result.SUCCESS,build.getResult());
+			assertEquals(helper.getLogs(build),Result.SUCCESS,build.getResult());
 			j.assertLogContains(Messages.read_succes(), build);
 			
 			BenchmarkAction a = build.getActions(BenchmarkAction.class).get(0);
@@ -325,11 +328,11 @@ public class BenchmarkBuilderTest {
 	public void readYCSBFailure() throws Exception {
 		String[] files = {"run_Failure","load_Failure","run_Name_Failure","load_Name_Failure"};
 		for (String f : files) {
-			FreeStyleProject project = j.createFreeStyleProject();
+			FreeStyleProject project = helper.createFreeStyleProject();
 			Builder builder = new BenchmarkBuilder(testdir + File.separatorChar + f + ".ycsb");
 			project.getBuildersList().add(builder);
 			FreeStyleBuild build = project.scheduleBuild2(0).get();//j.buildAndAssertSuccess(project);
-			assertEquals(HelperClass.getLogs(build),Result.FAILURE,build.getResult());
+			assertEquals(helper.getLogs(build),Result.FAILURE,build.getResult());
 			j.assertLogContains("Wrong format", build);
 			
 			BenchmarkAction a = build.getActions(BenchmarkAction.class).get(0);
@@ -343,13 +346,13 @@ public class BenchmarkBuilderTest {
 
 	@Test 
 	public void succesBuild() throws Exception {
-		FreeStyleProject project = j.createFreeStyleProject();
+		FreeStyleProject project = helper.createFreeStyleProject();
 		String f = testdir + File.separatorChar + "testBuild1.csv";
 		BenchmarkBuilder builder = new BenchmarkBuilder(f);
-		HelperClass.writeFile(f, "Metrik1;10\nMetrik2;20");
+		helper.writeFile(f, "Metrik1;10\nMetrik2;20");
 		project.getBuildersList().add(builder);
-		FreeStyleBuild build = project.scheduleBuild2(0).get();//j.buildAndAssertSuccess(project);
-		assertEquals(HelperClass.getLogs(build),Result.SUCCESS,build.getResult());
+		FreeStyleBuild build = project.scheduleBuild2(0).get();
+		assertEquals(helper.getLogs(build),Result.SUCCESS,build.getResult());
 		
 		BenchmarkConfiguration conf = builder.getConfig(project);
 		conf.change("Metrik1", new ConfigEntry(null,10d,null, 20d,null,1));
@@ -357,27 +360,27 @@ public class BenchmarkBuilderTest {
 		
 		j.assertLogContains(Messages.read_succes(), build);
 		
-		HelperClass.writeFile(f, "Metrik1;21\nMetrik2;20");
+		helper.writeFile(f, "Metrik1;21\nMetrik2;20");
 		build = project.scheduleBuild2(0).get();
 		j.assertLogContains(Messages.valueToHigh("Metrik1", 21, 20,""), build);
 		assertEquals("ON FAILURE mvn clean package",Result.FAILURE,build.getResult());
 		
-		HelperClass.writeFile(f, "Metrik1;19\nMetrik2;20");
+		helper.writeFile(f, "Metrik1;19\nMetrik2;20");
 		build = project.scheduleBuild2(0).get();
 		j.assertLogContains(Messages.higherThanLastTime("Metrik1", 90, 10), build);
 		assertEquals(Result.FAILURE,build.getResult());
 		
-		HelperClass.writeFile(f, "Metrik1;18\nMetrik2;21");
+		helper.writeFile(f, "Metrik1;18\nMetrik2;21");
 		build = project.scheduleBuild2(0).get();
 		//j.assertLogContains(Messages.higherThanLastTime("Metrik1", 80, 10), build);
 		j.assertLogContains(Messages.valueToHigh("Metrik2", 21, 20,""), build);
 		assertEquals(Result.FAILURE,build.getResult());
 		
-		HelperClass.writeFile(f, "Metrik1;5\nMetrik2;10");
+		helper.writeFile(f, "Metrik1;5\nMetrik2;10");
 		build = project.scheduleBuild2(0).get();
-		assertEquals(HelperClass.getLogs(build),Result.SUCCESS,build.getResult());
+		assertEquals(helper.getLogs(build),Result.SUCCESS,build.getResult());
 		
-		HelperClass.writeFile(f, "Metrik1;10\nMetrik2;15");
+		helper.writeFile(f, "Metrik1;10\nMetrik2;15");
 		build = project.scheduleBuild2(0).get();
 		j.assertLogContains(Messages.higherThanLastTime("Metrik1", 100, 10), build);
 		j.assertLogContains(Messages.higherThanLastTime("Metrik2", 50, 40), build);
@@ -386,25 +389,22 @@ public class BenchmarkBuilderTest {
 		conf.change("Metrik1", new ConfigEntry(null,null,null, 30d,null,1));
 		conf.change("Metrik2", new ConfigEntry(null,50d, null,null,null,1));
 		
-		HelperClass.writeFile(f, "Metrik1;25\nMetrik2;16");
+		helper.writeFile(f, "Metrik1;25\nMetrik2;16");
 		build = project.scheduleBuild2(0).get();
 		assertEquals(Result.FAILURE,build.getResult());
-		
-		// Assert that the console log contains the output we expect
-		//j.assertLogContains("", build);
 	}
 	
 	@Test
 	public void getWorkspaceTest() throws Exception{
-		FreeStyleProject project = j.createFreeStyleProject();
+		FreeStyleProject project = helper.createFreeStyleProject();
 		String f = testdir + File.separatorChar + "testBuild7.csv";
 		BenchmarkBuilder builder = new BenchmarkBuilder(f);
-		HelperClass.writeFile(f, "Metrik1;10\nMetrik2;20");
+		helper.writeFile(f, "Metrik1;10\nMetrik2;20");
 		project.getBuildersList().add(builder);
 		FreeStyleBuild build = project.scheduleBuild2(0).get();
 		assertNotNull(builder.getConfig(build));
 		
-		j.createFreeStyleProject();
+		helper.createFreeStyleProject();
 		String f2 = testdir + File.separatorChar + "testBuild7.csv";
 		BenchmarkBuilder builder2 = new BenchmarkBuilder(f2);
 		assertNotNull(builder2.getConfig(build));
@@ -412,48 +412,48 @@ public class BenchmarkBuilderTest {
 	
 	@Test
 	public void zeroTest() throws Exception{
-		FreeStyleProject project = j.createFreeStyleProject();
+		FreeStyleProject project = helper.createFreeStyleProject();
 		String f = testdir + File.separatorChar + "testBuild6.csv";
 		BenchmarkBuilder builder = new BenchmarkBuilder(f);
-		HelperClass.writeFile(f, "Metrik1;0\nMetrik2;0");
+		helper.writeFile(f, "Metrik1;0\nMetrik2;0");
 		project.getBuildersList().add(builder);
 		FreeStyleBuild build = project.scheduleBuild2(0).get();//j.buildAndAssertSuccess(project);
-		assertEquals(HelperClass.getLogs(build),Result.SUCCESS,build.getResult());
+		assertEquals(helper.getLogs(build),Result.SUCCESS,build.getResult());
 		
 		BenchmarkConfiguration conf = builder.getConfig(project);
 		conf.change("Metrik1", new ConfigEntry(null,10d,null, null, null,1));
 		conf.change("Metrik2", new ConfigEntry(10d,null,null, null, null,1));
 		
-		HelperClass.writeFile(f, "Metrik1;-10\nMetrik2;20");
+		helper.writeFile(f, "Metrik1;-10\nMetrik2;20");
 		build = project.scheduleBuild2(0).get();
-		assertEquals(HelperClass.getLogs(build),Result.SUCCESS,build.getResult());
+		assertEquals(helper.getLogs(build),Result.SUCCESS,build.getResult());
 		
 		conf.change("Metrik1", new ConfigEntry(null,null,null, null, null,1));
 		conf.change("Metrik2", new ConfigEntry(null,null,null, null, null,1));
 		
-		HelperClass.writeFile(f, "Metrik1;0\nMetrik2;0");
+		helper.writeFile(f, "Metrik1;0\nMetrik2;0");
 		build = project.scheduleBuild2(0).get();
-		assertEquals(HelperClass.getLogs(build),Result.SUCCESS,build.getResult());
+		assertEquals(helper.getLogs(build),Result.SUCCESS,build.getResult());
 		
 		conf.change("Metrik1", new ConfigEntry(null,10d,null, null, null,1));
 		
-		HelperClass.writeFile(f, "Metrik1;1\nMetrik2;0");
+		helper.writeFile(f, "Metrik1;1\nMetrik2;0");
 		build = project.scheduleBuild2(0).get();
-		assertEquals(HelperClass.getLogs(build),Result.FAILURE,build.getResult());
+		assertEquals(helper.getLogs(build),Result.FAILURE,build.getResult());
 		j.assertLogContains(Messages.higherThanExpected("Metrik1", 10d), build);
 		
 		conf.change("Metrik1", new ConfigEntry(null,null,null, null, null,1));
 		conf.change("Metrik2", new ConfigEntry(null,null,null, null, null,1));
 		
-		HelperClass.writeFile(f, "Metrik1;0\nMetrik2;0");
+		helper.writeFile(f, "Metrik1;0\nMetrik2;0");
 		build = project.scheduleBuild2(0).get();
-		assertEquals(HelperClass.getLogs(build),Result.SUCCESS,build.getResult());
+		assertEquals(helper.getLogs(build),Result.SUCCESS,build.getResult());
 		
 		conf.change("Metrik2", new ConfigEntry(10d,null,null, null, null,1));
 		
-		HelperClass.writeFile(f, "Metrik1;-10\nMetrik2;-20");
+		helper.writeFile(f, "Metrik1;-10\nMetrik2;-20");
 		build = project.scheduleBuild2(0).get();
-		assertEquals(HelperClass.getLogs(build),Result.FAILURE,build.getResult());
+		assertEquals(helper.getLogs(build),Result.FAILURE,build.getResult());
 		j.assertLogContains(Messages.lowerThanExpected("Metrik2", 10d), build);
 		
 		
@@ -461,19 +461,19 @@ public class BenchmarkBuilderTest {
 	
 	@Test
 	public void addBuildStepLater() throws Exception{
-		FreeStyleProject project = j.createFreeStyleProject();
+		FreeStyleProject project = helper.createFreeStyleProject();
 		String f = testdir + File.separatorChar + "testBuild2.csv";
 		BenchmarkBuilder builder = new BenchmarkBuilder(f);
-		HelperClass.writeFile(f, "Metrik1;10\nMetrik2;20");
+		helper.writeFile(f, "Metrik1;10\nMetrik2;20");
 		project.getBuildersList().add(builder);
 		FreeStyleBuild build = project.scheduleBuild2(0).get();//j.buildAndAssertSuccess(project);
-		assertEquals(HelperClass.getLogs(build),Result.SUCCESS,build.getResult());
+		assertEquals(helper.getLogs(build),Result.SUCCESS,build.getResult());
 		
 		
-		HelperClass.writeFile(f, "Metrik1;11\nMetrik2;21");
+		helper.writeFile(f, "Metrik1;11\nMetrik2;21");
 		
 		String f1 = testdir + File.separatorChar + "testBuild2.csv";
-		HelperClass.writeFile(f1, "Metrik1;90\nMetrik2;80");
+		helper.writeFile(f1, "Metrik1;90\nMetrik2;80");
 		BenchmarkBuilder builder1 = new BenchmarkBuilder(f1);
 		project.getBuildersList().add(builder1);
 		FreeStyleBuild build2 = project.scheduleBuild2(0).get();//j.buildAndAssertSuccess(project);
@@ -494,68 +494,68 @@ public class BenchmarkBuilderTest {
 	}
 	
 	@Test public void getProjectActions() throws Exception{
-		FreeStyleProject project = j.createFreeStyleProject();
+		FreeStyleProject project = helper.createFreeStyleProject();
 		String a = "a";
 		BenchmarkBuilder b1 = new BenchmarkBuilder(a);
 		assertFalse(b1.getProjectActions(project).isEmpty());
-		assertTrue(b1.getProjectActions(j.createFreeStyleProject()).isEmpty());
+		assertTrue(b1.getProjectActions(helper.createFreeStyleProject()).isEmpty());
 	}
 	
 	@Test 
 	public void lowerBound() throws Exception {
-		FreeStyleProject project = j.createFreeStyleProject();
+		FreeStyleProject project = helper.createFreeStyleProject();
 		String f = testdir + File.separatorChar + "testBuild4.csv";
 		BenchmarkBuilder builder = new BenchmarkBuilder(f);
-		HelperClass.writeFile(f, "Metrik1;10\nMetrik2;20");
+		helper.writeFile(f, "Metrik1;10\nMetrik2;20");
 		project.getBuildersList().add(builder);
 		FreeStyleBuild build = project.scheduleBuild2(0).get();
-		assertEquals(HelperClass.getLogs(build),Result.SUCCESS,build.getResult());
+		assertEquals(helper.getLogs(build),Result.SUCCESS,build.getResult());
 		BenchmarkConfiguration conf = builder.getConfig(project);
 		conf.change("Metrik1", new ConfigEntry(null,null,10d,null,null,1));
 		conf.change("Metrik2", new ConfigEntry(null,null,40d,null,null,1));
 		
-		HelperClass.writeFile(f, "Metrik1;10.000001\nMetrik2;55");
+		helper.writeFile(f, "Metrik1;10.000001\nMetrik2;55");
 		build = project.scheduleBuild2(0).get();
-		assertEquals(HelperClass.getLogs(build),Result.SUCCESS,build.getResult());
+		assertEquals(helper.getLogs(build),Result.SUCCESS,build.getResult());
 		
 		conf.change("Metrik1", new ConfigEntry(null,null,10d,null,"ms",1));
 		conf.change("Metrik2", new ConfigEntry(null,null,40d,null,"ns",1));
-		HelperClass.writeFile(f, "Metrik1;9.99999\nMetrik2;57");
+		helper.writeFile(f, "Metrik1;9.99999\nMetrik2;57");
 		build = project.scheduleBuild2(0).get();
-		assertEquals(HelperClass.getLogs(build),Result.FAILURE,build.getResult());
+		assertEquals(helper.getLogs(build),Result.FAILURE,build.getResult());
 		j.assertLogContains(Messages.valueToLow("Metrik1", 9.99999, 10d, " ms"), build);
 		
-		HelperClass.writeFile(f, "Metrik1;10\nMetrik2;16");
+		helper.writeFile(f, "Metrik1;10\nMetrik2;16");
 		build = project.scheduleBuild2(0).get();
-		assertEquals(HelperClass.getLogs(build),Result.FAILURE,build.getResult());
+		assertEquals(helper.getLogs(build),Result.FAILURE,build.getResult());
 		j.assertLogContains(Messages.valueToLow("Metrik2", 16d, 40d, " ns"), build);
 		
-		HelperClass.writeFile(f, "Metrik1;20\nMetrik2;60");
+		helper.writeFile(f, "Metrik1;20\nMetrik2;60");
 		conf.change("Metrik1", new ConfigEntry(0d,null,10d,null,"ms",1));
 		conf.change("Metrik2", new ConfigEntry(0d,null,40d,null,"ns",1));
 		build = project.scheduleBuild2(0).get();
-		assertEquals(HelperClass.getLogs(build),Result.SUCCESS,build.getResult());
+		assertEquals(helper.getLogs(build),Result.SUCCESS,build.getResult());
 		
-		HelperClass.writeFile(f, "Metrik1;120\nMetrik2;100");
+		helper.writeFile(f, "Metrik1;120\nMetrik2;100");
 		conf.change("Metrik1", new ConfigEntry(0d,null,10d,null,"ms",1));
 		conf.change("Metrik2", new ConfigEntry(0d,null,40d,null,"ns",1));
 		build = project.scheduleBuild2(0).get();
-		assertEquals(HelperClass.getLogs(build),Result.SUCCESS,build.getResult());
+		assertEquals(helper.getLogs(build),Result.SUCCESS,build.getResult());
 		
-		HelperClass.writeFile(f, "Metrik1;40\nMetrik2;50");
+		helper.writeFile(f, "Metrik1;40\nMetrik2;50");
 		build = project.scheduleBuild2(0).get();
-		assertEquals(HelperClass.getLogs(build),Result.FAILURE,build.getResult());
+		assertEquals(helper.getLogs(build),Result.FAILURE,build.getResult());
 		j.assertLogContains(Messages.lowerThanLastTime("Metrik2", -50d, 0), build);
 		
-		HelperClass.writeFile(f, "Metrik1;30\nMetrik2;50");
+		helper.writeFile(f, "Metrik1;30\nMetrik2;50");
 		build = project.scheduleBuild2(0).get();
-		assertEquals(HelperClass.getLogs(build),Result.FAILURE,build.getResult());
+		assertEquals(helper.getLogs(build),Result.FAILURE,build.getResult());
 		j.assertLogContains(Messages.lowerThanLastTime("Metrik2", -50d, 0), build);
 		j.assertLogContains(Messages.lowerThanLastTime("Metrik1", -75d, 0), build);
 		
-		HelperClass.writeFile(f, "Metrik1;5\nMetrik2;45");
+		helper.writeFile(f, "Metrik1;5\nMetrik2;45");
 		build = project.scheduleBuild2(0).get();
-		assertEquals(HelperClass.getLogs(build),Result.FAILURE,build.getResult());
+		assertEquals(helper.getLogs(build),Result.FAILURE,build.getResult());
 		j.assertLogContains(Messages.lowerThanLastTime("Metrik2", -55d, 0), build);
 		j.assertLogContains(Messages.lowerThanLastTime("Metrik1", -95.83d, 0), build);
 		j.assertLogContains(Messages.valueToLow("Metrik1", 5d, 10d, " ms"), build);

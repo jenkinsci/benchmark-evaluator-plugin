@@ -12,6 +12,8 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
 import org.jvnet.hudson.test.JenkinsRule;
 
 import com.google.gson.JsonObject;
@@ -27,34 +29,37 @@ import io.jenkins.plugins.benchmark.configuration.ConfigEntry;
 
 public class BenchmarkActionTest {
 
-	@Rule public JenkinsRule j = new JenkinsRule(); 
-
+	@Rule
+	public JenkinsRule j = new JenkinsRule();
 	private String testdir;
-	
+	private HelperClass helper;
+
+
 	@Before
 	public void createTestDir(){
-		testdir = HelperClass.createTestDir();
+		helper = new HelperClass(j);
+		testdir = helper.createTestDir();
 	}
-	
+
 	@After
 	public void delete(){
-		HelperClass.deleteTestFiles( testdir );
+		helper.deleteTestFiles();
 	}
  
 
 	@Test 
 	public void getJsons() throws Exception {
-		FreeStyleProject project = j.createFreeStyleProject();
+		final FreeStyleProject project = helper.createFreeStyleProject();
 		String file = "testAction1.csv";
 		BenchmarkBuilder builder = new BenchmarkBuilder(testdir + File.separatorChar +file);
 		project.getBuildersList().add(builder);
 
 		//RUN 1
 
-		HelperClass.writeFile(testdir + File.separatorChar +file, "Metrik1;25\nMetrik2;16");
+		helper.writeFile(testdir + File.separatorChar +file, "Metrik1;25\nMetrik2;16");
 
 		FreeStyleBuild build = project.scheduleBuild2(0).get();
-		assertEquals(HelperClass.getLogs(build),Result.SUCCESS,build.getResult());
+		assertEquals(helper.getLogs(build),Result.SUCCESS,build.getResult());
 
 		BenchmarkAction a = build.getActions(BenchmarkAction.class).get(0);
 		BenchmarkConfiguration conf = BenchmarkConfiguration.getConfig(getCurrentWorkspace(build)+"config"+builder.getID()+".config");
@@ -74,7 +79,7 @@ public class BenchmarkActionTest {
 		//RUN 2
 		System.out.println("RUN 2");
 
-		HelperClass.writeFile(testdir + File.separatorChar +file, "Metrik1;31\nMetrik2;17");
+		helper.writeFile(testdir + File.separatorChar +file, "Metrik1;31\nMetrik2;17");
 
 		build = project.scheduleBuild2(0).get();
 		assertEquals(Result.FAILURE,build.getResult());
@@ -93,9 +98,9 @@ public class BenchmarkActionTest {
 		//RUN 3
 		System.out.println("RUN 3");
 
-		HelperClass.writeFile(testdir + File.separatorChar+file, "Metrik1;30\nMetrik2;18");
+		helper.writeFile(testdir + File.separatorChar+file, "Metrik1;30\nMetrik2;18");
 		build = project.scheduleBuild2(0).get();
-		assertEquals(HelperClass.getLogs(build),Result.SUCCESS,build.getResult());
+		assertEquals(helper.getLogs(build),Result.SUCCESS,build.getResult());
 
 		a = build.getActions(BenchmarkAction.class).get(0);
 		firstResult = a.getFirstResultsAsJson();
@@ -111,7 +116,7 @@ public class BenchmarkActionTest {
 		//RUN 4
 		System.out.println("RUN 4");
 
-		HelperClass.writeFile(testdir + File.separatorChar+file, "Metrik1;40\nMetrik2;18");
+		helper.writeFile(testdir + File.separatorChar+file, "Metrik1;40\nMetrik2;18");
 		build = project.scheduleBuild2(0).get();
 		assertEquals(Result.FAILURE,build.getResult());
 
@@ -129,7 +134,7 @@ public class BenchmarkActionTest {
 		//RUN 5
 		System.out.println("RUN 5");
 
-		HelperClass.writeFile(testdir + File.separatorChar+file, "Metrik1;aa\nMetrik2;18");
+		helper.writeFile(testdir + File.separatorChar+file, "Metrik1;aa\nMetrik2;18");
 		build = project.scheduleBuild2(0).get();
 		assertEquals(Result.FAILURE,build.getResult());
 
@@ -149,7 +154,7 @@ public class BenchmarkActionTest {
 		System.out.println("RUN 6");
 
 
-		HelperClass.writeFile(testdir + File.separatorChar+file, "Metrik1;41\nMetrik2;19");
+		helper.writeFile(testdir + File.separatorChar+file, "Metrik1;41\nMetrik2;19");
 		build = project.scheduleBuild2(0).get();
 		assertEquals(Result.FAILURE,build.getResult());
 
@@ -167,9 +172,9 @@ public class BenchmarkActionTest {
 		//RUN 7
 		System.out.println("RUN 7");
 
-		HelperClass.writeFile(testdir + File.separatorChar+file, "Metrik1;15\nMetrik2;17");
+		helper.writeFile(testdir + File.separatorChar+file, "Metrik1;15\nMetrik2;17");
 		build = project.scheduleBuild2(0).get();
-		assertEquals(HelperClass.getLogs(build),Result.SUCCESS,build.getResult());
+		assertEquals(helper.getLogs(build),Result.SUCCESS,build.getResult());
 
 		a = build.getActions(BenchmarkAction.class).get(0);
 		firstResult = a.getFirstResultsAsJson();
@@ -185,9 +190,9 @@ public class BenchmarkActionTest {
 		//RUN 8
 		System.out.println("RUN 8");
 
-		HelperClass.writeFile(testdir + File.separatorChar+file, "Metrik1;18");
+		helper.writeFile(testdir + File.separatorChar+file, "Metrik1;18");
 		build = project.scheduleBuild2(0).get();
-		assertEquals(HelperClass.getLogs(build),Result.SUCCESS,build.getResult());
+		assertEquals(helper.getLogs(build),Result.SUCCESS,build.getResult());
 
 		a = build.getActions(BenchmarkAction.class).get(0);
 		firstResult = a.getFirstResultsAsJson();
@@ -203,9 +208,9 @@ public class BenchmarkActionTest {
 		//RUN 9
 		System.out.println("RUN 9");
 
-		HelperClass.writeFile(testdir + File.separatorChar+file, "Metrik1;15\nMetrik2;17");
+		helper.writeFile(testdir + File.separatorChar+file, "Metrik1;15\nMetrik2;17");
 		build = project.scheduleBuild2(0).get();
-		assertEquals(HelperClass.getLogs(build),Result.SUCCESS,build.getResult());
+		assertEquals(helper.getLogs(build),Result.SUCCESS,build.getResult());
 
 		a = build.getActions(BenchmarkAction.class).get(0);
 		firstResult = a.getFirstResultsAsJson();
@@ -236,17 +241,17 @@ public class BenchmarkActionTest {
 	
 	@Test
 	public void startErrors() throws Exception{
-		FreeStyleProject project = j.createFreeStyleProject();
+		final FreeStyleProject project = helper.createFreeStyleProject();
 		String file = "testAction4.csv";
 		BenchmarkBuilder builder = new BenchmarkBuilder(testdir + File.separatorChar+file);
 		project.getBuildersList().add(builder);
 
 		//RUN 1
 
-		HelperClass.writeFile(testdir + File.separatorChar+file, "Metrik1;25\nMetrik2;16");
+		helper.writeFile(testdir + File.separatorChar+file, "Metrik1;25\nMetrik2;16");
 
 		FreeStyleBuild build = project.scheduleBuild2(0).get();
-		assertEquals(HelperClass.getLogs(build),Result.SUCCESS,build.getResult());
+		assertEquals(helper.getLogs(build),Result.SUCCESS,build.getResult());
 
 		BenchmarkAction a = build.getActions(BenchmarkAction.class).get(0);
 		BenchmarkConfiguration conf = BenchmarkConfiguration.getConfig(getCurrentWorkspace(build)+"config"+builder.getID()+".config");
@@ -265,7 +270,7 @@ public class BenchmarkActionTest {
 		
 		//RUN 1
 
-		HelperClass.writeFile(testdir + File.separatorChar+file, "Metrik1;35\nMetrik2;16\nMetrik3;188");
+		helper.writeFile(testdir + File.separatorChar+file, "Metrik1;35\nMetrik2;16\nMetrik3;188");
 
 		build = project.scheduleBuild2(0).get();
 		assertEquals(Result.FAILURE,build.getResult());
@@ -296,14 +301,14 @@ public class BenchmarkActionTest {
 
 	@Test
 	public void errorAtFirstTime() throws Exception{
-		FreeStyleProject project = j.createFreeStyleProject();
+		final FreeStyleProject project = helper.createFreeStyleProject();
 		String file = "testAction2.csv";
 		Builder builder = new BenchmarkBuilder(testdir + File.separatorChar+file);
 		project.getBuildersList().add(builder);
 
 		//RUN 1
 
-		HelperClass.writeFile(testdir + File.separatorChar+file, "Metrik1;21a\nMetrik2;16");
+		helper.writeFile(testdir + File.separatorChar+file, "Metrik1;21a\nMetrik2;16");
 
 		FreeStyleBuild build = project.scheduleBuild2(0).get();
 		assertEquals(Result.FAILURE,build.getResult());
@@ -321,10 +326,10 @@ public class BenchmarkActionTest {
 		
 		//RUN 2
 		
-		HelperClass.writeFile(testdir + File.separatorChar+file, "Metrik1;21\nMetrik2;16");
+		helper.writeFile(testdir + File.separatorChar+file, "Metrik1;21\nMetrik2;16");
 
 		build = project.scheduleBuild2(0).get();
-		assertEquals(HelperClass.getLogs(build),Result.SUCCESS,build.getResult());
+		assertEquals(helper.getLogs(build),Result.SUCCESS,build.getResult());
 
 		a = build.getActions(BenchmarkAction.class).get(0);
 
@@ -339,10 +344,10 @@ public class BenchmarkActionTest {
 		
 		//RUN 3
 		
-		HelperClass.writeFile(testdir + File.separatorChar+file, "Metrik1;26\nMetrik2;1823");
+		helper.writeFile(testdir + File.separatorChar+file, "Metrik1;26\nMetrik2;1823");
 
 		build = project.scheduleBuild2(0).get();
-		assertEquals(HelperClass.getLogs(build),Result.SUCCESS,build.getResult());
+		assertEquals(helper.getLogs(build),Result.SUCCESS,build.getResult());
 
 		a = build.getActions(BenchmarkAction.class).get(0);
 
@@ -358,21 +363,20 @@ public class BenchmarkActionTest {
 
 	@Test
 	public void builderAddedLater() throws Exception{
-		
-		FreeStyleProject project = j.createFreeStyleProject();
+		final FreeStyleProject project = helper.createFreeStyleProject();
 		String file = "testAction3.csv";
 
 		//RUN 1
 
 		FreeStyleBuild build = project.scheduleBuild2(0).get();
-		assertEquals(HelperClass.getLogs(build),Result.SUCCESS,build.getResult());
+		assertEquals(helper.getLogs(build),Result.SUCCESS,build.getResult());
 		
 		//RUN 2
 		
 		Builder builder = new BenchmarkBuilder(testdir + File.separatorChar+file);
 		project.getBuildersList().add(builder);
 		
-		HelperClass.writeFile(testdir + File.separatorChar+file, "Metrik1;55\nMetrik2;66");
+		helper.writeFile(testdir + File.separatorChar+file, "Metrik1;55\nMetrik2;66");
 		build = project.scheduleBuild2(0).get();
 
 		BenchmarkAction a = build.getActions(BenchmarkAction.class).get(0);
@@ -387,10 +391,10 @@ public class BenchmarkActionTest {
 		
 		//RUN 2
 		
-		HelperClass.writeFile(testdir + File.separatorChar+file, "Metrik1;21\nMetrik2;16");
+		helper.writeFile(testdir + File.separatorChar+file, "Metrik1;21\nMetrik2;16");
 
 		build = project.scheduleBuild2(0).get();
-		assertEquals(HelperClass.getLogs(build),Result.SUCCESS,build.getResult());
+		assertEquals(helper.getLogs(build),Result.SUCCESS,build.getResult());
 
 		a = build.getActions(BenchmarkAction.class).get(0);
 
@@ -406,8 +410,7 @@ public class BenchmarkActionTest {
 	
 	@Test
 	public void twoBuilds() throws InterruptedException, ExecutionException, IOException{
-		
-		FreeStyleProject project = j.createFreeStyleProject();
+		final FreeStyleProject project = helper.createFreeStyleProject();
 		String d1 = "testAction100.csv";
 		String d2 = "testAction101.csv";
 		
@@ -418,8 +421,8 @@ public class BenchmarkActionTest {
 		Builder builder2 = new BenchmarkBuilder(testdir + File.separatorChar+ d2);
 		project.getBuildersList().add(builder2);
 		
-		HelperClass.writeFile(testdir + File.separatorChar+d1, "Metrik1;55\nMetrik2;66");
-		HelperClass.writeFile(testdir + File.separatorChar+d2, "Metrik1;-55\nMetrik2;-66");
+		helper.writeFile(testdir + File.separatorChar+d1, "Metrik1;55\nMetrik2;66");
+		helper.writeFile(testdir + File.separatorChar+d2, "Metrik1;-55\nMetrik2;-66");
 		FreeStyleBuild build = project.scheduleBuild2(0).get();
 
 		BenchmarkAction a = build.getActions(BenchmarkAction.class).get(0);

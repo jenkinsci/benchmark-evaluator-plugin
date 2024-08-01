@@ -7,12 +7,23 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.util.LinkedList;
 
 import hudson.model.FreeStyleBuild;
+import hudson.model.FreeStyleProject;
+import org.junit.Rule;
+import org.jvnet.hudson.test.JenkinsRule;
 
 public class HelperClass {
+
+	public JenkinsRule jenkinsRule;
+	private LinkedList<File> files = new LinkedList<File>();
+
+	public HelperClass( JenkinsRule jenkinsRule ){
+		this.jenkinsRule = jenkinsRule;
+	}
 	
-	public static void writeFile(String path, String text){
+	public void writeFile(String path, String text){
 		PrintWriter out = null;
 		try {
 			out = new PrintWriter(new BufferedWriter(new FileWriter(path)));
@@ -27,21 +38,40 @@ public class HelperClass {
 				out.close();
 		}
 	}
+
+	/**
+	 * Create a new FreeStyleProject
+	 * Project is initialized here to keep track of the files created
+	 * @return the created FreeStyleProject
+	 */
+	public FreeStyleProject createFreeStyleProject(){
+		try {
+			final FreeStyleProject freeStyleProject = jenkinsRule.createFreeStyleProject();
+			files.add( freeStyleProject.getRootDir() );
+			return freeStyleProject;
+		} catch (Exception e) {
+			e.printStackTrace();
+			return null;
+		}
+	}
 	
-	public static String createTestDir(){
+	public String createTestDir(){
         try {
 			final Path tempDirectory = Files.createTempDirectory( "testdir" );
 			System.out.println( "Created temp directory: " + tempDirectory.toString());
+			files.add( tempDirectory.toFile() );
 			return tempDirectory.toString();
 		} catch ( IOException e ) {
             throw new RuntimeException( e );
         }
 	}
 	
-	public static void writeTestFile(String testdir, String name, String content){
+	public void writeTestFile(String testdir, String name, String content){
 		PrintWriter out = null;
 		try {
-			out = new PrintWriter(new BufferedWriter(new FileWriter(testdir + File.separatorChar + name)));
+			final String fileName = testdir + File.separatorChar + name;
+			files.add( new File( fileName ) );
+			out = new PrintWriter(new BufferedWriter(new FileWriter( fileName )));
 			if(content!=null){
 				out.println(content);
 			}
@@ -53,17 +83,23 @@ public class HelperClass {
 		}
 	}
 	
-	public static void deleteTestFiles( String testdir ){
-		File f = new File( testdir );
-		if(f.exists() && f.isDirectory()){
-			for(File file : f.listFiles()){
-				file.delete();
+	public void deleteTestFiles(){
+		for(File f : files){
+			if(f.exists()){
+				if( f.isDirectory() ){
+					for(File file : f.listFiles()){
+						file.delete();
+					}
+					f.delete();
+				} else {
+					f.delete();
+				}
 			}
-			f.delete();
 		}
+		files.clear();
 	}
-	
-	public static String getLogs(FreeStyleBuild build) {
+
+	public String getLogs(FreeStyleBuild build) {
 		try {
 			return build.getLog(5000).stream().reduce("", (a,b) -> a + System.lineSeparator() + b);
 		} catch (IOException e) {

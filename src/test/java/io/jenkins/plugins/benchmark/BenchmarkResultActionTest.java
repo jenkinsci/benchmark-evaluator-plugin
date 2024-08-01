@@ -20,18 +20,20 @@ import hudson.model.Result;
 public class BenchmarkResultActionTest {
 
 
-	@Rule public JenkinsRule j = new JenkinsRule(); 
-
+	@Rule
+	public JenkinsRule j = new JenkinsRule();
 	private String testdir;
-	
+	private HelperClass helper;
+
 	@Before
 	public void createTestDir(){
-		testdir = HelperClass.createTestDir();
+		helper = new HelperClass(j);
+		testdir = helper.createTestDir();
 	}
 	
 	@After
 	public void delete(){
-		HelperClass.deleteTestFiles( testdir );
+		helper.deleteTestFiles();
 	}
  
 
@@ -39,14 +41,14 @@ public class BenchmarkResultActionTest {
 	public void resultTest() throws Exception {
 		
 
-		FreeStyleProject project = j.createFreeStyleProject();
+		FreeStyleProject project = helper.createFreeStyleProject();
 		String file = "resultsTest1.csv";
 		BenchmarkBuilder builder = new BenchmarkBuilder(testdir + File.separatorChar+file);
 		project.getBuildersList().add(builder);
 
 		BenchmarkResultAction benchmarkResult = (BenchmarkResultAction) project.getProminentActions().stream().filter(x->x instanceof BenchmarkResultAction).findFirst().get();
 		BenchmarkConfigAction configAction = (BenchmarkConfigAction) project.getProminentActions().stream().filter(x->x instanceof BenchmarkConfigAction).findFirst().get();
-		BenchmarkResultAction tProject = new BenchmarkResultAction(j.createFreeStyleProject(),builder);
+		BenchmarkResultAction tProject = new BenchmarkResultAction(helper.createFreeStyleProject(),builder);
 		
 		assertEquals("benchmarkResult_1",benchmarkResult.getUrlName());
 		assertEquals(null,tProject.getUrlName());
@@ -60,14 +62,14 @@ public class BenchmarkResultActionTest {
 
 		allEquals(result, "[]", "[]", "{}","{}", "[]");
 		
-		HelperClass.writeTestFile( testdir, file, "Metrik1;25\nMetrik2;16");
+		helper.writeTestFile( testdir, file, "Metrik1;25\nMetrik2;16");
 		FreeStyleBuild build = project.scheduleBuild2(0).get();
 		assertEquals(Result.SUCCESS,build.getResult());
 		
 		result = benchmarkResult.getAllInformations();
 		allEquals(result, "['#1']", "[]", "{\"Metrik1\":[[25.0,null,null,null,null,null]],\"Metrik2\":[[16.0,null,null,null,null,null]]}","{}", "[null]");
 		
-		HelperClass.writeFile(testdir + File.separatorChar+file, "Metrik1;25\nMetrik2;16a\nname;thisIstheName");
+		helper.writeFile(testdir + File.separatorChar+file, "Metrik1;25\nMetrik2;16a\nname;thisIstheName");
 		build = project.scheduleBuild2(0).get();
 		assertEquals(Result.FAILURE,build.getResult());
 		
@@ -75,7 +77,7 @@ public class BenchmarkResultActionTest {
 		allEquals(result, "['#1','#2']", "['#2']"
 				, "{\"Metrik1\":[[25.0,null,null,null,null,null],[null,null,null,null,null,null]],\"Metrik2\":[[16.0,null,null,null,null,null],[null,null,null,null,null,null]]}","{}", "[null,\"thisIstheName\"]");
 		
-		HelperClass.writeFile(testdir + File.separatorChar+file, "Metrik1;50\nMetrik2;16\nName;thisIstheName2");
+		helper.writeFile(testdir + File.separatorChar+file, "Metrik1;50\nMetrik2;16\nName;thisIstheName2");
 		build = project.scheduleBuild2(0).get();
 		assertEquals(Result.SUCCESS,build.getResult());
 		
@@ -98,7 +100,7 @@ public class BenchmarkResultActionTest {
 		configAction.createMetric("Metrik3");
 		configAction.setMetricUnit("Metrik3", "m3");
 		
-		HelperClass.writeFile(testdir + File.separatorChar+file, "Metrik1;75\nMetrik2;8");
+		helper.writeFile(testdir + File.separatorChar+file, "Metrik1;75\nMetrik2;8");
 		build = project.scheduleBuild2(0).get();
 		assertEquals(Result.SUCCESS,build.getResult());
 		project.getBuildByNumber(3).delete();
@@ -115,7 +117,7 @@ public class BenchmarkResultActionTest {
 		
 		assertEquals(result, benchmarkResult.getAllInformations());
 		
-		HelperClass.writeFile(testdir + File.separatorChar+file, "Metrik1;150\nMetrik2;16\nName;thisIstheName3");
+		helper.writeFile(testdir + File.separatorChar+file, "Metrik1;150\nMetrik2;16\nName;thisIstheName3");
 		build = project.scheduleBuild2(0).get();
 		assertEquals(Result.FAILURE,build.getResult());
 		
@@ -125,7 +127,7 @@ public class BenchmarkResultActionTest {
 				+ "\"Metrik2\":[[16.0,null,null,null,null,null],[8.0,null,null,-0.5,null,null],[16.0,null,null,1.0,null,null]]"
 				+ "}","{'Metrik1':'m1'}", "[null,null,\"thisIstheName3\"]");
 		
-		HelperClass.writeFile(testdir + File.separatorChar+file, "Name;thisIstheName4\nMetrik1;75\nMetrik2;32\nMetrik3;30");
+		helper.writeFile(testdir + File.separatorChar+file, "Name;thisIstheName4\nMetrik1;75\nMetrik2;32\nMetrik3;30");
 		build = project.scheduleBuild2(0).get();
 		assertEquals(Result.SUCCESS,build.getResult());
 		
@@ -138,7 +140,7 @@ public class BenchmarkResultActionTest {
 		
 		configAction.setMetricMinValue("Metrik1", 95d);
 		
-		HelperClass.writeFile(testdir + File.separatorChar+file, "Name;thisIstheName5\nMetrik1;90\nMetrik2;50\nMetrik3;90");
+		helper.writeFile(testdir + File.separatorChar+file, "Name;thisIstheName5\nMetrik1;90\nMetrik2;50\nMetrik3;90");
 		build = project.scheduleBuild2(0).get();
 		assertEquals(Result.FAILURE,build.getResult());
 		
@@ -186,13 +188,13 @@ public class BenchmarkResultActionTest {
 		allEquals(result, builds, unsuccBuilds, dataSet2, "{'Metrik1':'m1','Metrik3':'someElse'}",
 				"[null,null,\"thisIstheName3\",\"thisIstheName4\",\"thisIstheName5\",\"thisIstheName5\"]");
 		
-		project = j.createFreeStyleProject();
+		project = helper.createFreeStyleProject();
 		file = "resultsTest2.csv";
 		builder = new BenchmarkBuilder(testdir + File.separatorChar+file);
 		project.scheduleBuild2(0).get();
 		project.getBuildersList().add(builder);
 		benchmarkResult = (BenchmarkResultAction) project.getProminentActions().stream().filter(x->x instanceof BenchmarkResultAction).findFirst().get();
-		HelperClass.writeFile(testdir + File.separatorChar+file, "Metrik1;25\nName;THEName\nMetrik2;16");
+		helper.writeFile(testdir + File.separatorChar+file, "Metrik1;25\nName;THEName\nMetrik2;16");
 		project.scheduleBuild2(0).get();
 		result = benchmarkResult.getAllInformations();
 		allEquals(result, "['#2']", "[]", "{\"Metrik1\":[[25.0,null,null,null,null,null]],\"Metrik2\":[[16.0,null,null,null,null,null]]}","{}",
@@ -202,8 +204,8 @@ public class BenchmarkResultActionTest {
 	}
 	
 	@Test
-	public void negativValues() throws Exception{
-		FreeStyleProject project = j.createFreeStyleProject();
+	public void negativValues() throws Exception {
+		FreeStyleProject project = helper.createFreeStyleProject();
 		String file = "resultsTest5.csv";
 		BenchmarkBuilder builder = new BenchmarkBuilder(testdir + File.separatorChar+file);
 		project.getBuildersList().add(builder);
@@ -211,7 +213,7 @@ public class BenchmarkResultActionTest {
 		BenchmarkResultAction benchmarkResult = (BenchmarkResultAction) project.getProminentActions().stream().filter(x->x instanceof BenchmarkResultAction).findFirst().get();
 		BenchmarkConfigAction configAction = (BenchmarkConfigAction) project.getProminentActions().stream().filter(x->x instanceof BenchmarkConfigAction).findFirst().get();
 		
-		HelperClass.writeFile(testdir + File.separatorChar+file, "Metrik1;-25\nMetrik2;10");
+		helper.writeFile(testdir + File.separatorChar+file, "Metrik1;-25\nMetrik2;10");
 		FreeStyleBuild build = project.scheduleBuild2(0).get();
 		assertEquals(Result.SUCCESS,build.getResult());
 		
@@ -221,7 +223,7 @@ public class BenchmarkResultActionTest {
 		configAction.setMetricMaxPercent("Metrik1", 0d);
 		configAction.setMetricMaxPercent("Metrik2", 0d);
 		
-		HelperClass.writeFile(testdir + File.separatorChar+file, "Metrik1;-50\nMetrik2;-10");
+		helper.writeFile(testdir + File.separatorChar+file, "Metrik1;-50\nMetrik2;-10");
 		build = project.scheduleBuild2(0).get();
 		assertEquals(Result.SUCCESS,build.getResult());
 		
@@ -236,7 +238,7 @@ public class BenchmarkResultActionTest {
 		configAction.setMetricMinPercent("Metrik1", 0d);
 		configAction.setMetricMinPercent("Metrik2", 0d);
 		
-		HelperClass.writeFile(testdir + File.separatorChar+file, "Metrik1;-10\nMetrik2;20");
+		helper.writeFile(testdir + File.separatorChar+file, "Metrik1;-10\nMetrik2;20");
 		build = project.scheduleBuild2(0).get();
 		assertEquals(Result.SUCCESS,build.getResult());
 		
@@ -249,14 +251,14 @@ public class BenchmarkResultActionTest {
 	
 	@Test
 	public void zeroValues() throws Exception{
-		FreeStyleProject project = j.createFreeStyleProject();
+		FreeStyleProject project = helper.createFreeStyleProject();
 		String file = "resultsTest6.csv";
 		BenchmarkBuilder builder = new BenchmarkBuilder(testdir + File.separatorChar+file);
 		project.getBuildersList().add(builder);
 
 		BenchmarkResultAction benchmarkResult = (BenchmarkResultAction) project.getProminentActions().stream().filter(x->x instanceof BenchmarkResultAction).findFirst().get();
 		
-		HelperClass.writeFile(testdir + File.separatorChar+file, "Metrik1;0\nMetrik2;0\nMetrik3;0");
+		helper.writeFile(testdir + File.separatorChar+file, "Metrik1;0\nMetrik2;0\nMetrik3;0");
 		FreeStyleBuild build = project.scheduleBuild2(0).get();
 		assertEquals(Result.SUCCESS,build.getResult());
 		
@@ -267,7 +269,7 @@ public class BenchmarkResultActionTest {
 				+ "\"Metrik3\":[[0.0,null,null,null,null,null]]"
 				+ "}","{}","[null]");
 		
-		HelperClass.writeFile(testdir + File.separatorChar+file, "Metrik1;100\nMetrik2;-200\nMetrik3;0");
+		helper.writeFile(testdir + File.separatorChar+file, "Metrik1;100\nMetrik2;-200\nMetrik3;0");
 		build = project.scheduleBuild2(0).get();
 		assertEquals(Result.SUCCESS,build.getResult());
 		
@@ -281,7 +283,7 @@ public class BenchmarkResultActionTest {
 	
 	@Test
 	public void beforeStart() throws Exception{
-		FreeStyleProject project = j.createFreeStyleProject();
+		FreeStyleProject project = helper.createFreeStyleProject();
 		String file = "resultsTest7.csv";
 		BenchmarkBuilder builder = new BenchmarkBuilder(testdir + File.separatorChar+file);
 		project.getBuildersList().add(builder);
@@ -289,7 +291,7 @@ public class BenchmarkResultActionTest {
 		BenchmarkResultAction benchmarkResult = (BenchmarkResultAction) project.getProminentActions().stream().filter(x->x instanceof BenchmarkResultAction).findFirst().get();
 		BenchmarkConfigAction configAction = (BenchmarkConfigAction) project.getProminentActions().stream().filter(x->x instanceof BenchmarkConfigAction).findFirst().get();
 		
-		HelperClass.writeFile(testdir + File.separatorChar+file, "Metrik1;0\nMetrik2;0\nMetrik3;0");
+		helper.writeFile(testdir + File.separatorChar+file, "Metrik1;0\nMetrik2;0\nMetrik3;0");
 		
 		String result = benchmarkResult.getAllInformations();
 		allEquals(result, "[]", "[]", "{}", "{}", "[]");

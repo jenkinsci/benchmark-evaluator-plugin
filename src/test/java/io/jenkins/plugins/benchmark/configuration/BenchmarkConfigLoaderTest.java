@@ -8,22 +8,28 @@ import java.util.HashMap;
 
 import org.junit.After;
 import org.junit.Before;
+import org.junit.Rule;
 import org.junit.Test;
 
 import io.jenkins.plugins.benchmark.HelperClass;
+import org.jvnet.hudson.test.JenkinsRule;
 
 public class BenchmarkConfigLoaderTest {
-	
+
+	@Rule
+	public JenkinsRule j = new JenkinsRule();
 	private String testdir;
-	
+	private HelperClass helper;
+
 	@Before
 	public void createTestDir(){
-		testdir = HelperClass.createTestDir();
+		helper = new HelperClass(j);
+		testdir = helper.createTestDir();
 	}
 	
 	@After
 	public void delete(){
-		HelperClass.deleteTestFiles( testdir );
+		helper.deleteTestFiles();
 	}
  
 
@@ -32,7 +38,7 @@ public class BenchmarkConfigLoaderTest {
 		
 		File f1 = new File(testdir + File.separatorChar + "configLoad1.config");
 		String t = "Metrik1;10;11;12;13;;1\n";
-		HelperClass.writeFile(f1.getPath(), t);
+		helper.writeFile(f1.getPath(), t);
 		
 		Method m = BenchmarkConfigLoader.class.getDeclaredMethod("isDouble", String.class);
 		m.setAccessible(true);

@@ -18,26 +18,28 @@ import io.jenkins.plugins.benchmark.configuration.BenchmarkConfiguration;
 import io.jenkins.plugins.benchmark.configuration.ConfigEntry;
 
 public class BenchmarkConfigActionTest {
-	
-	@Rule public JenkinsRule j = new JenkinsRule(); 
 
+	@Rule
+	public JenkinsRule j = new JenkinsRule();
 	private String testdir;
-	
+	private HelperClass helper;
+
 	@Before
 	public void createTestDir(){
-		testdir = HelperClass.createTestDir();
+		helper = new HelperClass(j);
+		testdir = helper.createTestDir();
 	}
 	
 	@After
 	public void delete(){
-		HelperClass.deleteTestFiles( testdir );
+		helper.deleteTestFiles();
 	}
  
 
 	@Test
 	public void configTest() throws Exception {
 		
-		FreeStyleProject project = j.createFreeStyleProject();
+		FreeStyleProject project = helper.createFreeStyleProject();
 		String file = "configTest1.csv";
 		BenchmarkBuilder builder = new BenchmarkBuilder(testdir + File.separatorChar+file);
 		project.getBuildersList().add(builder);
@@ -52,7 +54,7 @@ public class BenchmarkConfigActionTest {
 		
 		assertTrue(configAction.getConfiguration().isEmpty());
 		
-		BenchmarkConfigAction tProject = new BenchmarkConfigAction(conf, j.createFreeStyleProject());
+		BenchmarkConfigAction tProject = new BenchmarkConfigAction(conf, helper.createFreeStyleProject());
 		
 		assertEquals("benchmarkConfig_1",configAction.getUrlName());
 		assertEquals(null,tProject.getUrlName());
@@ -62,10 +64,10 @@ public class BenchmarkConfigActionTest {
 		assertNull(tProject.getIconFileName());
 		
 		//Create Data
-		HelperClass.writeFile(testdir + File.separatorChar+file, "Metrik1;25\nMetrik2;16");
+		helper.writeFile(testdir + File.separatorChar+file, "Metrik1;25\nMetrik2;16");
 
 		FreeStyleBuild build = project.scheduleBuild2(0).get();
-		assertEquals(HelperClass.getLogs(build),Result.SUCCESS,build.getResult());
+		assertEquals(helper.getLogs(build),Result.SUCCESS,build.getResult());
 		
 		boolean metrik1 = false;
 		boolean metrik2 = false;
@@ -149,7 +151,7 @@ public class BenchmarkConfigActionTest {
 	@Test
 	public void configTestWithMin() throws Exception {
 		
-		FreeStyleProject project = j.createFreeStyleProject();
+		FreeStyleProject project = helper.createFreeStyleProject();
 		String file = "configTest2.csv";
 		BenchmarkBuilder builder = new BenchmarkBuilder(testdir + File.separatorChar+file);
 		project.getBuildersList().add(builder);
@@ -169,10 +171,10 @@ public class BenchmarkConfigActionTest {
 		assertFalse(configAction.createMetric("metrik1"));
 		assertTrue(configAction.deleteMetric("metrik1"));
 		
-		HelperClass.writeFile(testdir + File.separatorChar+file, "metrik1;25\nmetrik2;16");
+		helper.writeFile(testdir + File.separatorChar+file, "metrik1;25\nmetrik2;16");
 
 		FreeStyleBuild build = project.scheduleBuild2(0).get();
-		assertEquals(HelperClass.getLogs(build),Result.SUCCESS,build.getResult());
+		assertEquals(helper.getLogs(build),Result.SUCCESS,build.getResult());
 		assertFalse(configAction.deleteMetric("metrik1"));
 		assertFalse(configAction.createMetric("metrik1"));
 		

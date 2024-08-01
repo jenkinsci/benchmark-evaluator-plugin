@@ -19,17 +19,23 @@ import java.util.concurrent.TimeUnit;
 
 import org.junit.After;
 import org.junit.Before;
+import org.junit.Rule;
 import org.junit.Test;
 
 import io.jenkins.plugins.benchmark.HelperClass;
+import org.jvnet.hudson.test.JenkinsRule;
 
 public class BenchmarkConfigurationTest {
 
+	@Rule
+	public JenkinsRule j = new JenkinsRule();
 	private String testdir;
-	
+	private HelperClass helper;
+
 	@Before
 	public void createTestDir(){
-		testdir = HelperClass.createTestDir();
+		helper = new HelperClass(j);
+		testdir = helper.createTestDir();
 	}
 	
 	@Before
@@ -49,13 +55,13 @@ public class BenchmarkConfigurationTest {
 		String[] names = {"testConfig", "testConfig1"};
 		
 		for (int i = 0; i < contents.length; i++) {
-			HelperClass.writeTestFile( testdir, names[i] + ".config", contents[i]);
+			helper.writeTestFile( testdir, names[i] + ".config", contents[i]);
 		}
 	}
 	
 	@After
 	public void delete(){
-		HelperClass.deleteTestFiles( testdir );
+		helper.deleteTestFiles();
 	}
 
 	@Test
@@ -264,7 +270,7 @@ public class BenchmarkConfigurationTest {
 				+ "Metrik4;--1;3.420.212;null;4;UNIT;Qwert\n"
 				+ "Metrik5;1;2;3;4;UNIT;\n"
 				+ "Metrik6;1;2;3;4;UNIT;aws;\n";
-		HelperClass.writeFile(f1.getPath(), t);
+		helper.writeFile(f1.getPath(), t);
 		BenchmarkConfiguration config = BenchmarkConfiguration.getConfig(f1.getAbsolutePath());
 		ConfigEntry c = config.get("Metrik1");
 		assertEquals(10d, c.getMinPercent(),1E-10);
@@ -295,7 +301,7 @@ public class BenchmarkConfigurationTest {
 	public void rightFormatedConfig() {
 		File f1 = new File( testdir + File.separatorChar + "config18.config");
 		String t = "Metrik1;-10;11;-12;13;;1\n";
-		HelperClass.writeFile(f1.getPath(), t);
+		helper.writeFile(f1.getPath(), t);
 		BenchmarkConfiguration config = BenchmarkConfiguration.getConfig(f1.getAbsolutePath());
 		ConfigEntry c = config.get("Metrik1");
 		assertEquals(-10d, c.getMinPercent(),1E-10);
